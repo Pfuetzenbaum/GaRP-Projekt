@@ -38,7 +38,9 @@ def bundle_paragraphs(text):
     
     for paragraph in text:
         if '♀' in paragraph:
-            
+            paragraph = paragraph.replace('\n','')
+            formated_text += paragraph + '\n\n'
+        else:
             paragraph = paragraph.replace('\n','')
             formated_text += paragraph + '\n\n'
 

@@ -1,4 +1,5 @@
 from pdfminer.high_level import extract_text
+from pdfminer.layout import LTPage
 
 def extract_text_and_headings(pdf_path, num_header_lines, num_footer_lines, start_page, end_page):
     extracted_text = ""
@@ -37,12 +38,8 @@ def bundle_paragraphs(text):
     text = text.split('\n\n')
     
     for paragraph in text:
-        if '♀' in paragraph:
-            paragraph = paragraph.replace('\n','')
-            formated_text += paragraph + '\n\n'
-        else:
-            paragraph = paragraph.replace('\n','')
-            formated_text += paragraph + '\n\n'
+        paragraph = paragraph.replace('\n','')
+        formated_text += paragraph + '\n\n'
 
     return formated_text
 
@@ -60,8 +57,8 @@ def main():
     optimized_text = remove_hyphen(optimized_text)
     optimized_text = bundle_paragraphs(optimized_text)
 
-    print("Extrahierter Text:")
-    print(optimized_text)
+    # print("Extrahierter Text:")
+    # print(optimized_text)
 
 if __name__ == "__main__":
     main()

@@ -1,5 +1,5 @@
 from pdfminer.high_level import extract_pages
-import pdfminer.layout as pdf_layout
+from pdfminer.layout import LTTextBoxHorizontal, LTChar, LTTextContainer
 
 
 def extract_text(pdf_file, start_page, end_page, num_header_lines, num_footer_lines):
@@ -26,7 +26,7 @@ def extract_text(pdf_file, start_page, end_page, num_header_lines, num_footer_li
         for element in single_page: 
 
             # Überprüfung, ob aktuelles Element auf Seite LTTextBoxHorizontal ist    
-            if isinstance(element, pdf_layout.LTTextBoxHorizontal):
+            if isinstance(element, LTTextContainer):
                 #Übergebene Anzahl an Zeilen (Header) am Anfang einer Seite ignorieren
                 counter += 1
                 if counter <= num_header_lines:
@@ -39,13 +39,13 @@ def extract_text(pdf_file, start_page, end_page, num_header_lines, num_footer_li
                 # Nach zusammenfügen von jedem Absatz zwei Leerzeilen zur Strukturierung hinzufügen
                 full_text = full_text + "\n\n"
 
-        # Finden von Satzenden mit einem Punkt an einem Seitenende
-        while full_text[-1] == " " or full_text[-1] == "\n":
-            full_text = full_text.rstrip(" \n")
+        # # Finden von Satzenden mit einem Punkt an einem Seitenende
+        # while full_text[-1] == " " or full_text[-1] == "\n":
+        #     full_text = full_text.rstrip(" \n")
 
-        if full_text[-1] == ".":
-            print("Seitenende mit Punkt")
-            print(full_text[-10:])
+        # if full_text[-1] == ".":
+        #     print("Seitenende mit Punkt")
+        #     print(full_text[-10:])
         
     return full_text
 
@@ -81,12 +81,12 @@ def main():
     num_footer_lines = 0
 
     # Seiten, welche ausgelesen werden
-    start_page = 1
-    end_page = 2
+    start_page = 6
+    end_page = 8
 
     # Extrahierung des Textes der PDF
     # Bündelung in jeweils passende Absätze im Fließtext
-    text = extract_text(pdf_file_1, start_page, end_page, num_header_lines, num_footer_lines)
+    text = extract_text(pdf_file_2, start_page, end_page, num_header_lines, num_footer_lines)
 
     # Manuelle Korrekturen des Fließtextes
     text = correct_text(text)

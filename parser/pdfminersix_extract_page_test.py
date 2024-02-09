@@ -14,6 +14,7 @@ def extract_pages_content(pdf_file):
                 line_format.append(format_per_line)
     
     print(page_text)
+    print(line_format)
 
 
 def text_extraction(element):
@@ -22,13 +23,14 @@ def text_extraction(element):
     line_formats = []
 
     for text_line in element:
-        for character in text_line:
-            if isinstance(character, LTChar):
-                line_formats.append(character.fontname)
-                line_formats.append(character.size)
-    format_per_line = list(set(line_formats))
+        if isinstance(element, LTTextContainer):
+            for character in text_line:
+                if isinstance(character, LTChar):
+                    line_formats.append(character.fontname)
+                    line_formats.append(character.size)
+        format_per_line = list(set(line_formats))
 
-    return line_text, format_per_line
+    return (line_text, format_per_line)
 
 
 def main():

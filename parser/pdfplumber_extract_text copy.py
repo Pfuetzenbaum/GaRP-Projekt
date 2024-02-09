@@ -1,5 +1,4 @@
-from pdfminer.high_level import extract_pages
-import pdfminer.layout as pdf_layout
+import pdfplumber
 
 
 def extract_text(pdf_file, start_page, end_page, num_header_lines, num_footer_lines):
@@ -9,44 +8,30 @@ def extract_text(pdf_file, start_page, end_page, num_header_lines, num_footer_li
     # Initialisierung der Text Variable
     full_text = ''
 
-    # Iteration über jede einzelne Seite, welche extrahiert wird
-    for single_page in extract_pages(pdf_file):
-        # Erhöhe den Seitenzähler
-        current_page += 1  
-        if current_page < start_page:
-            # Springe zur nächsten Seite, wenn start_page noch nicht erreicht ist
-            continue  
-        elif current_page > end_page:
-            # Beende Schleife, wenn end_page überschritten wird
-            break  
+    # Öffnen des PDFs mit pdfplumber
+    with pdfplumber.open(pdf_file) as pdf:
+        # Iteration über jede einzelne Seite, welche extrahiert wird
+        for current_page, single_page in enumerate(pdf.pages):
+            # Erhöhe den Seitenzähler
+            current_page += 1  
+            if current_page < start_page:
+                # Springe zur nächsten Seite, wenn start_page noch nicht erreicht ist
+                continue  
+            elif current_page > end_page:
+                # Beende Schleife, wenn end_page überschritten wird
+                break  
 
-        
-        # counter für Header Behandlung
-        counter = 0
-        for element in single_page: 
-
-            # Überprüfung, ob aktuelles Element auf Seite LTTextBoxHorizontal ist    
-            if isinstance(element, pdf_layout.LTTextBoxHorizontal):
+            # counter für Header Behandlung
+            counter = 0
+            for element in single_page.extract_text().split('\n'):
                 #Übergebene Anzahl an Zeilen (Header) am Anfang einer Seite ignorieren
                 counter += 1
                 if counter <= num_header_lines:
                     continue
 
                 # Zusammenfügen der einzelnen List-Elemente zu einem Absatz
-                for paragraph in element.get_text().split(): 
-                    full_text = full_text + paragraph + " "
+                full_text += element + "\n\n"
 
-                # Nach zusammenfügen von jedem Absatz zwei Leerzeilen zur Strukturierung hinzufügen
-                full_text = full_text + "\n\n"
-
-        # Finden von Satzenden mit einem Punkt an einem Seitenende
-        while full_text[-1] == " " or full_text[-1] == "\n":
-            full_text = full_text.rstrip(" \n")
-
-        if full_text[-1] == ".":
-            print("Seitenende mit Punkt")
-            print(full_text[-10:])
-        
     return full_text
 
 def correct_text(text):

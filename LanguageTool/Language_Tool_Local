@@ -1,0 +1,71 @@
+import language_tool_python
+
+# Klasse zur Verwaltung des LanguageTool-Wrappers
+class LanguageToolLocal:
+    # Initialisierung des LanguageTool-Wrappers
+    def __init__(self, language):
+        self.tool = language_tool_python.LanguageTool(language)
+
+    # Funktion zum Korrigieren von Fehlern mithilfe des LanguageTool-Wrappers
+    def correct_mistake(self, text): 
+        return self.tool.correct(text)
+
+    # Funktion zum Überprüfen der Grammatik und der Rechtschreibung mithilfe des LanguageTool-Wrappers
+    def check_grammar(self, text):
+        return self.tool.check(text)
+
+    # Funktion zum Hinzufügen von Wörtern zum Wörterbuch
+    def add_word_to_dict(self, word):
+        self.tool._register_spellings(word)
+
+    # Funktion zum Entfernen von Wörtern aus dem Wörterbuch
+    def remove_word_from_dict(self):
+        # Unregister-Methode entfernt lediglich die neu hinzugefügten Wörter -> Neu Implementierung nötig?
+        self.tool._unregister_spellings()
+
+        # Funktion zum Abrufen des lokalen Pfades des Wörterbuches
+    def get_valid_spelling_file_path(self):
+        return self.tool._get_valid_spelling_file_path()
+
+    # Schließen des LanguageTool-Servers
+    def close(self):
+        self.tool.close()
+
+# Initialisierung der LanguageTool-Klasse
+tool_local = LanguageToolLocal('de-DE')
+
+def read_text():
+    with open('Projektmanagement_Beispieltext', 'r') as file:
+        text = file.read()
+        return text
+
+def test_correct():
+    text = read_text()
+    return tool_local.correct_mistake(text)
+
+def test_check():
+    text = read_text()
+    mistakes = tool_local.check_grammar(text)
+    # Wenn keine Fehler gefunden wurden, wird eine entsprechende Meldung ausgegeben
+    if(mistakes is None):
+        print("Keine Fehler gefunden!")
+    # Zur Demonstration werden die gefundenen Fehler ausgegeben
+    else:
+        for mistake in mistakes:
+            print(mistake.offset,mistake.errorLength, mistake.replacements)
+
+def main():
+    print(test_correct())
+    test_check()
+    print (tool_local.get_valid_spelling_file_path())
+
+if __name__ == "__main__":
+    main()
+    tool_local.close()
+
+# noch nicht funktionell
+# def test_add_word_to_dict():
+#     tool_local.add_word_to_dict(["Jira"])
+
+# def test_remove_word_from_dict():
+#     tool_local.remove_word_from_dict()

@@ -28,7 +28,7 @@ class LanguageToolAPI:
 tool_api = LanguageToolAPI('de-DE')
 
 def read_text():
-    with open('Projektmanagement_Beispieltext', 'r') as file:
+    with open('LanguageTool/Language_Tool_Local', 'r') as file:
         text = file.read()
         return text
 

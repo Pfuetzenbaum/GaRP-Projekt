@@ -1,10 +1,11 @@
 import language_tool_python
+# Programm zum Testen der temporären Wörterbuchfunktionen -> nur in Englisch in der Library verfügbar
 
 # Klasse zur Verwaltung des LanguageTool-Wrappers
 class LanguageToolLocal:
     # Initialisierung des LanguageTool-Wrappers
-    def __init__(self, language):
-        self.tool = language_tool_python.LanguageTool(language)
+    def __init__(self, language, newSpellings=None):
+        self.tool = language_tool_python.LanguageTool(language, newSpellings= newSpellings)
 
     # Funktion zum Korrigieren von Fehlern mithilfe des LanguageTool-Wrappers
     def correct_mistake(self, text): 
@@ -32,7 +33,7 @@ class LanguageToolLocal:
         self.tool.close()
 
 # Initialisierung der LanguageTool-Klasse
-tool_local = LanguageToolLocal('de-DE')
+tool_local = LanguageToolLocal('en-US',newSpellings=["Hoschen"])
 
 def read_text():
     with open('LanguageTool/Language_Tool_Local', 'r') as file:
@@ -65,7 +66,7 @@ def main():
     # print(test_correct())
     test_check()
     print (tool_local.get_valid_spelling_file_path())
-    tool_local.add_word_to_dict(["Höschen"])
+    tool_local.remove_word_from_dict()
 
 if __name__ == "__main__":
     main()

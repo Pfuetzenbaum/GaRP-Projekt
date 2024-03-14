@@ -1,5 +1,4 @@
 package com.example;
-
 /**
  * Hello world!
  *
@@ -22,7 +21,7 @@ public class App
     {
         String text = "Lenny ist rappenpappenvoll";
         // Test 1 -> Temporäres Hinzufügen von Wörtern
-        // 1.Check -> Rappenpappenvoll -> Fehler
+        System.out.println("1. Check -> Rappenpappenvoll -> Fehler");
         JLanguageTool langTool = new JLanguageTool(new GermanyGerman());
         List<RuleMatch> matches = langTool.check(text);
         for (RuleMatch match : matches) {
@@ -35,7 +34,6 @@ public class App
         // comment in to use statistical ngram data:
         //langTool.activateLanguageModelRules(new File("/data/google-ngram-data"));
         for (Rule rule : langTool.getAllActiveRules()) {
-            System.out.println(rule.getId() + " -> " + rule.getDescription());
             if (rule instanceof SpellingCheckRule) {
             List<String> wordsToIgnore = Arrays.asList("rappenpappenvoll");
             ((SpellingCheckRule)rule).acceptPhrases(wordsToIgnore);
@@ -43,6 +41,7 @@ public class App
         }
         
         // 2. Check -> Rappenpappenvoll -> Kein Fehler
+        System.out.println("2. Check -> Rappenpappenvoll -> Kein Fehler");
         matches = langTool.check(text);
         for (RuleMatch match : matches) {
             System.out.println("Potential error at characters " +

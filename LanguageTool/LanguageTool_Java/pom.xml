@@ -27,7 +27,7 @@
     </dependency>
     <dependency>
       <groupId>org.languagetool</groupId>
-      <artifactId>language-de</artifactId>
+      <artifactId>language-all</artifactId>
       <version>6.3</version>
     </dependency>
   
@@ -36,6 +36,11 @@
       <artifactId>commons-codec</artifactId>
       <version>1.13</version>
     </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>1.2.3</version>
+  </dependency>
   </dependencies>
 
   <build>

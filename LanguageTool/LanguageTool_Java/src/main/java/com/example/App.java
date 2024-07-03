@@ -19,6 +19,8 @@ public class App
 {
     public static void main( String[] args ) throws IOException
     {
+        long startTime = System.currentTimeMillis();
+
         String text = "Lenny ist rappenpappenvoll";
         // Test 1 -> Temporäres Hinzufügen von Wörtern
         System.out.println("1. Check -> Rappenpappenvoll -> Fehler");
@@ -52,6 +54,8 @@ public class App
             }
         
         // Test 2 -> Dauerhaftes Hinzufügen von Wörtern
-
+        long endTime = System.currentTimeMillis();
+        long executionTime = endTime - startTime;
+        System.out.println("Execution time: " + executionTime + " milliseconds");
     }
 }

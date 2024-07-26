@@ -4,12 +4,12 @@ from pdfminer.layout import LTTextBoxHorizontal, LTTextLine
 # Initialisierung des Seitenzählers
 current_page = 0  
 
-start_page = 6
-end_page = 7
+start_page = 1
+end_page = 1
 
 # Initialisierung der Text Variable
 extracted_text = ""
-pdf_file = "parser\\test_files\\sample03.pdf"
+pdf_file = "parser\\test_files\\sample04.pdf"
 # pdf_file = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\parser\\test_files\TestDokument.pdf"
 
 

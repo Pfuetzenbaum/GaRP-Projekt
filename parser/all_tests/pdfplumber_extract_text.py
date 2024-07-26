@@ -4,7 +4,6 @@ def extract_text_from_pdf(pdf_path, start_page, end_page):
     with pdfplumber.open(pdf_path) as pdf:
         text = ""
         last_font = ""
-        last_size = ""
 
         for page in pdf.pages:
             # Überspringe Seiten vor start_page
@@ -17,7 +16,8 @@ def extract_text_from_pdf(pdf_path, start_page, end_page):
 
             for char in page.chars:
                 char_text = char.get("text")
-                if char.get("fontname") == last_font and char.get("size") == last_size:
+                # if char.get("fontname") == last_font and char.get("size") == last_size:
+                if char.get("fontname") == last_font:
                     if char_text is not None:
                         text += char_text
                 else:
@@ -26,7 +26,6 @@ def extract_text_from_pdf(pdf_path, start_page, end_page):
                     if char_text is not None:
                         text += char_text
                 last_font = char.get("fontname")
-                last_size = char.get("size")
         return text
 
         
@@ -45,6 +44,8 @@ def correct_text(text):
 
     # Wörter, bei denen die Silbentrennung die Wörter in zwei Zeilen trennt, muss der Bindestrich am Zeilenende entfernt und mit dem Wort der nächsten Zeile verbunden werden
     text = text.replace("-\n", "")
+    text = text.replace("\n-", "")
+    text = text.replace("-", "")
 
     return text
 
@@ -53,24 +54,26 @@ def main():
     # Zwei unterschiedliche PDFs zum testen
 
     # Word -> PDF
-    pdf_file_1 = 'parser\\TestDokument.pdf'
+    pdf_file_1 = 'parser\\test_files\\TestDokument.pdf'
     # Latex -> PDF
-    pdf_file_2 = 'parser\\PA2_Version_7_0.pdf'
+    pdf_file_2 = 'parser\\test_files\\PA2_Version_7_0.pdf'
+    # Latex Test -> PDF
+    pdf_file_3 = 'parser\\test_files\\sample03.pdf'
 
     # Anzahl Header und Footer Zeilen
     num_header_lines = 0
     num_footer_lines = 0
 
     # Seiten, welche ausgelesen werden
-    start_page = 6
-    end_page = 8
+    start_page = 1
+    end_page = 2
 
     # Extrahierung des Textes der PDF
     # Bündelung in jeweils passende Absätze im Fließtext
     text = extract_text_from_pdf(pdf_file_2, start_page, end_page)
 
     # Manuelle Korrekturen des Fließtextes
-    # text = correct_text(text)
+    text = correct_text(text)
 
     # Speichern des Textes in eine .txt mit UTF-8 Codierung
     file = "parser\\output_test.txt"

@@ -26,7 +26,7 @@ def extract_text(pdf_file, start_page, end_page, num_header_lines, num_footer_li
         for element in single_page: 
 
             # Überprüfung, ob aktuelles Element auf Seite LTTextBoxHorizontal ist    
-            if isinstance(element, LTTextContainer):
+            if isinstance(element, LTTextBoxHorizontal):
                 #Übergebene Anzahl an Zeilen (Header) am Anfang einer Seite ignorieren
                 counter += 1
                 if counter <= num_header_lines:
@@ -75,18 +75,20 @@ def main():
     pdf_file_1 = 'parser\\TestDokument.pdf'
     # Latex -> PDF
     pdf_file_2 = 'parser\\PA2_Version_7_0.pdf'
+    # Latex Test -> PDF
+    pdf_file_3 = 'parser\\test_files\\sample04.pdf'
 
     # Anzahl Header und Footer Zeilen
     num_header_lines = 0
     num_footer_lines = 0
 
     # Seiten, welche ausgelesen werden
-    start_page = 6
-    end_page = 8
+    start_page = 1
+    end_page = 2
 
     # Extrahierung des Textes der PDF
     # Bündelung in jeweils passende Absätze im Fließtext
-    text = extract_text(pdf_file_2, start_page, end_page, num_header_lines, num_footer_lines)
+    text = extract_text(pdf_file_3, start_page, end_page, num_header_lines, num_footer_lines)
 
     # Manuelle Korrekturen des Fließtextes
     text = correct_text(text)

@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog, Text
 
+from parser.pdfminer_text_extraction import extract_text_from_pdf_structured
+
+
 def check_spelling():
     # This function will handle the spell check logic
     pass
@@ -8,8 +11,8 @@ def check_spelling():
 def upload_file():
     file_path = filedialog.askopenfilename()
     if file_path:
-        # Here you would extract text from the PDF and display it
-        pdf_content_textbox.insert(tk.END, "Extracted PDF content goes here...")
+        extracted_text= extract_text_from_pdf_structured(file_path)
+        pdf_content_textbox.insert(tk.END, extracted_text)
 
 # Main application window
 root = tk.Tk()

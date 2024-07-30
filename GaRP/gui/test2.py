@@ -1,7 +1,14 @@
 import tkinter as tk
 from tkinter import filedialog, Text
 
-from parser.pdfminer_text_extraction import extract_text_from_pdf_structured
+import sys
+import os
+
+# Füge den Pfad zur obersten Ebene deines Projekts hinzu
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
+
+# Jetzt sollte der Import funktionieren
+from GaRP.parser.pdfminer_text_extraction import extract_text_from_pdf_structured
 
 
 def check_spelling():

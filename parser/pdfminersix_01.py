@@ -1,8 +1,6 @@
 from pdfminer.high_level import extract_pages
 from pdfminer.layout import LTTextBoxHorizontal, LTTextLine
 
-from gui.test2 import upload_file
-
 def extract_text_from_pdf_pagewise(pdf_file, start_page, end_page):
     extracted_text = ""
     current_page = 0
@@ -52,8 +50,6 @@ if __name__ == "__main__":
     start_page = 1
     end_page = 10
     output_file = "parser\\output_test.txt"
-
-    upload_file()
 
     extracted_text = extract_text_from_pdf_pagewise(pdf_file, start_page, end_page)
     cleaned_text = clean_text(extracted_text)

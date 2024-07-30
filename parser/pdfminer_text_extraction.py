@@ -46,16 +46,20 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                                         text += "\n•"
                                         continue
                                 
-                                if check_fontname == True:
+                                if check_fontname:
                                     current_char, current_fontname, current_size = handle_font_change(character, current_fontname, current_size)
                                 else:
                                     current_char, current_fontname, current_size = handle_size_change(character, current_fontname, current_size)
 
                                 text += current_char
 
+                            #LTAnno entspricht Leerzeichen und Seitenumbrüchen (\n)
                             elif isinstance(character, LTAnno):
                                 text += " "
+
+    # Entferne die ersten beiden Zeichen des Textes, da sie leer sind (\n\n)
     text = text[2:]
+
     return text
 
 def extract_text_from_pdf_pagewise(pdf_file, starting_page=1, ending_page=100, first_lines_to_skip=0):
@@ -125,6 +129,7 @@ def clean_text(cleaned_text):
     cleaned_text = cleaned_text.replace("ﬃ", "fi")
     cleaned_text = cleaned_text.replace("ﬁ", "fi")
     cleaned_text = cleaned_text.replace("ﬀ", "ff")
+    
     return cleaned_text
 
 def save_text_to_file(text, output_file):

@@ -62,11 +62,11 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
     return text
 
-def extract_text_from_pdf_pagewise(pdf_file, starting_page=1, ending_page=100, first_lines_to_skip=0):
+def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, first_lines_to_skip=0):
     extracted_text = ""
     current_page = 0
 
-    for single_page in extract_pages(pdf_file):
+    for single_page in extract_pages(pdf_path):
         current_page += 1
         if current_page < starting_page:
             continue
@@ -129,7 +129,7 @@ def clean_text(cleaned_text):
     cleaned_text = cleaned_text.replace("ﬃ", "fi")
     cleaned_text = cleaned_text.replace("ﬁ", "fi")
     cleaned_text = cleaned_text.replace("ﬀ", "ff")
-    
+
     return cleaned_text
 
 def save_text_to_file(text, output_file):

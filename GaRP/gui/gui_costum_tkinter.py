@@ -48,27 +48,27 @@ def open_settings_window():
 
     settings_window = ctk.CTkToplevel(root)
     settings_window.title("Einstellungen")
-    settings_window.geometry("1000x400")
+    settings_window.geometry("600x400")
 
-    ctk.CTkLabel(settings_window, text="Starting Page:").pack(side="left", padx=5, pady=5)
+    ctk.CTkLabel(settings_window, text="Starting Page:").pack( padx=5, pady=5)
     starting_page_entry = ctk.CTkEntry(settings_window)
     starting_page_entry.insert(0, settings["starting_page"])
-    starting_page_entry.pack(side="left", padx=5, pady=5)
+    starting_page_entry.pack(padx=5, pady=5)
 
-    ctk.CTkLabel(settings_window, text="Ending Page:").pack(side="left", padx=5, pady=5)
+    ctk.CTkLabel(settings_window, text="Ending Page:").pack(padx=5, pady=5)
     ending_page_entry = ctk.CTkEntry(settings_window)
     ending_page_entry.insert(0, settings["ending_page"])
-    ending_page_entry.pack(side="left", padx=5, pady=5)
+    ending_page_entry.pack(padx=5, pady=5)
 
-    ctk.CTkLabel(settings_window, text="Check Font Name:").pack(side="left", padx=5, pady=5)
+    ctk.CTkLabel(settings_window, text="Check Font Name:").pack(padx=5, pady=5)
     check_fontname_var = ctk.BooleanVar(value=settings["check_fontname"])
     check_fontname_checkbox = ctk.CTkCheckBox(settings_window, text="", variable=check_fontname_var)
-    check_fontname_checkbox.pack(side="left", padx=5, pady=5)
+    check_fontname_checkbox.pack(padx=5, pady=5)
 
-    ctk.CTkLabel(settings_window, text="First Lines to Skip:").pack(side="left", padx=5, pady=5)
+    ctk.CTkLabel(settings_window, text="First Lines to Skip:").pack( padx=5, pady=5)
     first_lines_to_skip_entry = ctk.CTkEntry(settings_window)
     first_lines_to_skip_entry.insert(0, settings["first_lines_to_skip"])
-    first_lines_to_skip_entry.pack(side="left", padx=5, pady=5)
+    first_lines_to_skip_entry.pack(padx=5, pady=5)
 
     ctk.CTkButton(settings_window, text="Save", command=save_settings).pack(side="bottom", padx=5, pady=20)
 

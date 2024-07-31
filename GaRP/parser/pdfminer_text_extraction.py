@@ -1,7 +1,7 @@
 from pdfminer.high_level import extract_pages
 from pdfminer.layout import LTTextBoxHorizontal, LTChar, LTTextLine, LTAnno
 
-def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100, check_fontname=False, first_lines_to_skip=0):
+def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100, check_fontname=False, first_lines_to_skip=0, last_lines_to_skip=0):
     current_fontname = None
     current_size = 1.0
     extracted_text = ""
@@ -21,9 +21,10 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
             break
         
         current_line = 0
+        total_lines = len([elem for elem in page if isinstance(elem, LTTextBoxHorizontal)])
+
         for page_element in page:
             if isinstance(page_element, LTTextBoxHorizontal):
-
                 # Überspringe die ersten Zeilen der Seite
                 if current_line < first_lines_to_skip:
                     current_line += 1
@@ -31,7 +32,11 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
                 # Für Footer Entfernung: 
                 # get length of page_element in page
-                # iterate x times less then wanted
+                # iterate x times less then wanted with a if statement and if x is reached break
+                if current_line >= total_lines - last_lines_to_skip:
+                    break
+
+                current_line += 1
 
                 for text_line in page_element:
                     if isinstance(text_line, LTTextLine):
@@ -68,7 +73,7 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
     return cleaned_text
 
-def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, first_lines_to_skip=0):
+def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, first_lines_to_skip=0, last_lines_to_skip=0):
     extracted_text = ""
     current_page = 0
 
@@ -80,6 +85,7 @@ def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, f
             break
 
         current_line = 0
+        total_lines = len([elem for elem in single_page if isinstance(elem, LTTextBoxHorizontal)])
         for element in single_page:
             if isinstance(element, LTTextBoxHorizontal):
 
@@ -87,6 +93,14 @@ def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, f
                 if current_line < first_lines_to_skip:
                     current_line += 1
                     continue 
+
+                # Für Footer Entfernung: 
+                # get length of page_element in page
+                # iterate x times less then wanted with a if statement and if x is reached break
+                if current_line >= total_lines - last_lines_to_skip:
+                    break
+
+                current_line += 1
 
                 for text_line in element:
                     if isinstance(text_line, LTTextLine):
@@ -150,12 +164,15 @@ def main():
     plain_text = ""
 
     # Einstellungen für die Textextraktion, abhängig von der PDF-Datei
-    filename = "GaRP\\parser\\test_files\\BA_BR.pdf"
-    starting_page = 8
-    ending_page = 13
+    filename = "GaRP\\parser\\test_files\\sample04.pdf"
+    starting_page = 1
+    ending_page = 1
     
     # Anzahl der Zeilen, die zu Beginn jeder Seite übersprungen werden sollen
-    first_lines_to_skip = 2
+    first_lines_to_skip = 0
+
+    # Anzahl der Zeilen, die am Ende jeder Seite übersprungen werden sollen
+    last_lines_to_skip = 0
 
     # True: Strukturiert nach Schriftart und Schriftgröße
     # False: Unstrukturiert, nur Seitenweise Extraktion
@@ -167,9 +184,9 @@ def main():
     check_fontname = False
 
     if extract_structured:
-        extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip)
+        extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip, last_lines_to_skip)
     else:
-        extracted_and_cleaned_text = extract_text_from_pdf_pagewise(filename, starting_page, ending_page, first_lines_to_skip)
+        extracted_and_cleaned_text = extract_text_from_pdf_pagewise(filename, starting_page, ending_page, first_lines_to_skip, last_lines_to_skip)
 
     save_text_to_file(extracted_and_cleaned_text, output_file)
 

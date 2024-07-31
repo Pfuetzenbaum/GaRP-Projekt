@@ -20,11 +20,11 @@ public class App
     public static void main( String[] args ) throws IOException
     {
         long startTime = System.currentTimeMillis();
-
+        GermanyGerman germany = new GermanyGerman();
         String text = "Lenny ist rappenpappenvoll";
         // Test 1 -> Temporäres Hinzufügen von Wörtern
         System.out.println("1. Check -> Rappenpappenvoll -> Fehler");
-        JLanguageTool langTool = new JLanguageTool(new GermanyGerman());
+        JLanguageTool langTool = new JLanguageTool(germany);
         List<RuleMatch> matches = langTool.check(text);
         for (RuleMatch match : matches) {
             System.out.println("Potential error at characters " +

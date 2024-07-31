@@ -29,7 +29,7 @@ public class DictionaryManager {
         }
     }
 
-    // WIP: Mit Robin abkkären, welche Funktionen benötigt werden
+    // WIP: Mit Robin abkkären, welche Rückgabewerte benötigt werden
     public List<RuleMatch> checkText(String text) throws IOException{
         List<RuleMatch> matches = languageTool.check(text);
         return matches;

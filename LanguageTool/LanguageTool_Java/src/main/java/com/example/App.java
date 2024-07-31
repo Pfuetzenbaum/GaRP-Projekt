@@ -21,7 +21,7 @@ public class App
     {
         long startTime = System.currentTimeMillis();
         GermanyGerman germany = new GermanyGerman();
-        String text = "Lenny ist rappenpappenvoll";
+        String text = "Lenny ist Rappenpappenvoll";
         // Test 1 -> Temporäres Hinzufügen von Wörtern
         System.out.println("1. Check -> Rappenpappenvoll -> Fehler");
         JLanguageTool langTool = new JLanguageTool(germany);
@@ -53,7 +53,6 @@ public class App
             match.getSuggestedReplacements());
             }
         
-        // Test 2 -> Dauerhaftes Hinzufügen von Wörtern
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
         System.out.println("Execution time: " + executionTime + " milliseconds");

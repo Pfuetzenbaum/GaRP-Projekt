@@ -4,7 +4,7 @@ from pdfminer.layout import LTTextBoxHorizontal, LTChar, LTTextLine, LTAnno
 def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100, check_fontname=False, first_lines_to_skip=0):
     current_fontname = None
     current_size = 1.0
-    text = ""
+    extracted_text = ""
 
     # Initialisierung des Seitenzählers
     current_page = 0
@@ -29,6 +29,10 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                     current_line += 1
                     continue 
 
+                # Für Footer Entfernung: 
+                # get length of page_element in page
+                # iterate x times less then wanted
+
                 for text_line in page_element:
                     if isinstance(text_line, LTTextLine):
                         for character in text_line:
@@ -37,13 +41,13 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                                 # Problembehandlung von Ligaturen und Aufzählungszeichen
                                 match character.get_text():
                                     case "ﬀ":
-                                        text += "ff"
+                                        extracted_text += "ff"
                                         continue
                                     case "ﬃ":
-                                        text += "ffi"
+                                        extracted_text += "ffi"
                                         continue
                                     case "•":
-                                        text += "\n•"
+                                        extracted_text += "\n•"
                                         continue
                                 
                                 if check_fontname:
@@ -51,16 +55,18 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                                 else:
                                     current_char, current_fontname, current_size = handle_size_change(character, current_fontname, current_size)
 
-                                text += current_char
+                                extracted_text += current_char
 
                             #LTAnno entspricht Leerzeichen und Seitenumbrüchen (\n)
                             elif isinstance(character, LTAnno):
-                                text += " "
+                                extracted_text += " "
 
     # Entferne die ersten beiden Zeichen des Textes, da sie leer sind (\n\n)
-    text = text[2:]
+    extracted_text = extracted_text[2:]
 
-    return text
+    cleaned_text = clean_text(extracted_text)
+
+    return cleaned_text
 
 def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, first_lines_to_skip=0):
     extracted_text = ""
@@ -94,7 +100,9 @@ def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, f
         extracted_text += "Seitenumbruch einfügen"
     extracted_text = extracted_text.replace("Seitenumbruch einfügen", "\n")
 
-    return extracted_text
+    cleaned_text = clean_text(extracted_text)
+
+    return cleaned_text
 
 def handle_font_change(character, current_fontname, current_size):
     if character.fontname != current_fontname or abs(character.size - current_size) / current_size >= 0.1:
@@ -138,11 +146,11 @@ def save_text_to_file(text, output_file):
 
 def main():
     # Standardwerte für die Textextraktion
-    output_file = "parser\\output_test.txt"  
+    output_file = "GaRP\\parser\\output_test.txt"  
     plain_text = ""
 
     # Einstellungen für die Textextraktion, abhängig von der PDF-Datei
-    filename = "parser\\test_files\\BA_BR.pdf"
+    filename = "GaRP\\parser\\test_files\\BA_BR.pdf"
     starting_page = 8
     ending_page = 13
     
@@ -151,7 +159,7 @@ def main():
 
     # True: Strukturiert nach Schriftart und Schriftgröße
     # False: Unstrukturiert, nur Seitenweise Extraktion
-    extract_structured = False
+    extract_structured = True
 
     # Notwendig, wenn extract_structured = True
     # True: Gruppierung nach Schriftart und Schriftgröße
@@ -159,12 +167,11 @@ def main():
     check_fontname = False
 
     if extract_structured:
-        plain_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip)
+        extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip)
     else:
-        plain_text = extract_text_from_pdf_pagewise(filename, starting_page, ending_page, first_lines_to_skip)
+        extracted_and_cleaned_text = extract_text_from_pdf_pagewise(filename, starting_page, ending_page, first_lines_to_skip)
 
-    cleaned_text = clean_text(plain_text)
-    save_text_to_file(cleaned_text, output_file)
+    save_text_to_file(extracted_and_cleaned_text, output_file)
 
 if __name__ == "__main__":
     main()

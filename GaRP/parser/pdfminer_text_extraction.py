@@ -154,6 +154,12 @@ def clean_text(cleaned_text):
 
     return cleaned_text
 
+# Zugriff direkt über GUI, keine Einbindung in andere Funktionen
+def except_words(text, words_to_except):
+    for word in words_to_except:
+        text = text.replace(word, "")
+    return text
+
 def save_text_to_file(text, output_file):
     with open(output_file, "w", encoding="utf-8") as file:
         file.write(text)
@@ -164,7 +170,7 @@ def main():
     plain_text = ""
 
     # Einstellungen für die Textextraktion, abhängig von der PDF-Datei
-    filename = "GaRP\\parser\\test_files\\sample04.pdf"
+    filename = "GaRP\\parser\\test_files\\sample06.pdf"
     starting_page = 1
     ending_page = 1
     
@@ -176,12 +182,12 @@ def main():
 
     # True: Strukturiert nach Schriftart und Schriftgröße
     # False: Unstrukturiert, nur Seitenweise Extraktion
-    extract_structured = True
+    extract_structured = False
 
     # Notwendig, wenn extract_structured = True
     # True: Gruppierung nach Schriftart und Schriftgröße
     # False: Gruppierung nur nach Schriftgröße
-    check_fontname = False
+    check_fontname = True
 
     if extract_structured:
         extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip, last_lines_to_skip)

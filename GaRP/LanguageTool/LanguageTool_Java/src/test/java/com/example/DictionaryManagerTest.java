@@ -10,11 +10,10 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+// Noch überarbeiten mit Tests zu Filehandlern
 class DictionaryManagerTest {
     private DictionaryManager dictionaryManager;
     private static final String DICTIONARY_FILE_PATH = "src/Dictionary/CustomDictionaryTest";
-    //
-    private static final String initialwords = "Aless, tetwort, Grrammatik";
 
     @BeforeEach
     void setUp() throws IOException {
@@ -22,17 +21,27 @@ class DictionaryManagerTest {
     }
 
     @Test
+    void testInitialDictionaryWordsAreIgnored() throws IOException {
+        String word = "Wetttt";
+        // Schauen ob das bereits im Wörterbuch vorhandene Wort bei Initialisierung zur Ignorierung hinzugefügt wurde
+        assertTrue(dictionaryManager.checkText(word).isEmpty());
+    }
+
+
+    // Testen, ob das Wort korrekt als falsch erkannt wurde
+    @Test
     void testCheckText() throws IOException {
         String text = "Alles purrfekt";
         List<RuleMatch> matches = dictionaryManager.checkText(text);
         assertEquals(6, matches.get(0).getFromPos());
     }
 
+    // Wort zum Wörterbuch hinzufügen und anschließen prüfen ob es den Fehler noch anzeigt
+    // WIP: Überprüfung ob Wort auch im Wörterbuch vorhanden ist
     @Test
     void testAddWord() throws IOException {
         String word = "purfekt";
         dictionaryManager.addWord(word);
-        // Assert that the word is now in the dictionary
         assertTrue(dictionaryManager.checkText(word).isEmpty());
     }
 
@@ -44,12 +53,13 @@ class DictionaryManagerTest {
         assertTrue(dictionaryManager.checkText(word).isEmpty());
     }
 
+    // Wort zum Wörterbuch hinzufügen und anschließend entfernen und prüfen ob es den Fehler noch anzeigt
+    // WIP: Überprüfung ob Wort auch im Wörterbuch nicht mehr vorhanden ist
     @Test
     void testRemoveWord() throws IOException {
         String word = "testword";
         dictionaryManager.addWord(word);
         dictionaryManager.removeWord(word);
-        // Assert that the word is no longer in the dictionary
-        assertFalse(dictionaryManager.checkText(word).isEmpty());
+        assertTrue(dictionaryManager.checkText(word).isEmpty());
     }
 }

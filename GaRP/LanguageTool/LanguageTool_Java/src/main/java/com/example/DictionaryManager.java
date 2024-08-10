@@ -6,7 +6,7 @@ import java.util.*;
 import py4j.GatewayServer;
 
 import org.languagetool.JLanguageTool;
-import org.languagetool.language.GermanyGerman;
+import org.languagetool.Language;
 import org.languagetool.rules.RuleMatch;
 import org.languagetool.rules.Rule;
 import org.languagetool.rules.spelling.SpellingCheckRule;
@@ -16,13 +16,18 @@ public class DictionaryManager {
     private JLanguageTool languageTool;
 
     // Bei der Initialisierung wird das Dictionary eingelesen und die Wörter als Ausnahmen für die Rechtschreibprüfung hinzugefügt
-    public DictionaryManager(String dictionaryFilePath, GermanyGerman german) throws IOException {
+    // Lanuage wird als allgemeines Objekt initialisiert, die spezifischen Sprachen erben von diesen und können so initialisiert werden
+    // Für Deutsch: new GermanyGerman()
+    // Für Englisch: new BritishEnglish()
+    public DictionaryManager(String dictionaryFilePath, Language language) throws IOException {
         dictionaryHandler = new DictionaryFileHandler(dictionaryFilePath);
-        languageTool = new JLanguageTool(german);
+        languageTool = new JLanguageTool(language);
         addIgnoredWordsFromDictionary();
     }
 
-    public void addIgnoredWordsFromDictionary() throws IOException {
+    // Methode zum Ignorieren der bereits vorhandenen Wörter aus dem Dictionary
+    // Lediglich intern genutzt
+    private void addIgnoredWordsFromDictionary() throws IOException {
         List<String> words = dictionaryHandler.readDictionary();
         for (Rule rule : languageTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
@@ -31,13 +36,17 @@ public class DictionaryManager {
         }
     }
 
+    // Methode zum Prüfen des Textes auf Rechtschreib-/Grammatikfehler
     // WIP: Mit Robin abkkären, welche Rückgabewerte benötigt werden
+    // Wenn das eigentliche fehlerhafte Wort zurückgegeben werden soll, muss eine Anpassung vorgenommen werden
     public List<RuleMatch> checkText(String text) throws IOException{
         List<RuleMatch> matches = languageTool.check(text);
         return matches;
     }
 
-    // WIP: Funktion einbauen: Nur Fehler die Rechtschreibfehler sind, dürfen hinzugefügt werden
+    // Methode zum Hinzufügen eines Wortes zum Dictionary zum dauerhaften Ignorieren
+    // WIP: Funktion einbauen: Nur Fehler die Rechtschreibfehler sind, dürfen hinzugefügt werden -> 
+    // Sonst werden Kommafehler etc. auch hinzugefügt -> Mit Robin abklären -> Fügt er vlt. den Button dynamisch ein?
     public void addWord(String word) throws IOException {
         List<String> words = dictionaryHandler.readDictionary();
         words.add(word);
@@ -50,6 +59,7 @@ public class DictionaryManager {
         }
     }
 
+    // Methode zum Ignorieren eines Wortes in der aktuellen Session
     // WIP: Funktion einbauen: Nur Fehler die Rechtschreibfehler sind, dürfen hinzugefügt werden
     public void ignoreWordInSession(String word) {
         for (Rule rule : languageTool.getAllActiveRules()) {
@@ -60,8 +70,9 @@ public class DictionaryManager {
         }
     }
 
-    // WIP: Weg finden ohne das Tool neu zu starten?
-    // Sonst muss das Ganze neu initialisiert werden -> Bedeutet, dass auch Session-Wörter verloren gehen
+    // Methode zum Entfernen eines Wortes aus dem Dictionary
+    // Nur Funktionell nach Neustart des LTs 
+    // Da hier das Dictionary neu eingelesen werden muss
     public void removeWord(String word) throws IOException {
         dictionaryHandler.deleteWord(word);
     }

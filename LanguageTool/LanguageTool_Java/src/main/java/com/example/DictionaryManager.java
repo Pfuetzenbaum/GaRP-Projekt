@@ -3,6 +3,8 @@ package com.example;
 import java.io.IOException;
 import java.util.*;
 
+import py4j.GatewayServer;
+
 import org.languagetool.JLanguageTool;
 import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
@@ -62,5 +64,11 @@ public class DictionaryManager {
     // Sonst muss das Ganze neu initialisiert werden -> Bedeutet, dass auch Session-Wörter verloren gehen
     public void removeWord(String word) throws IOException {
         dictionaryHandler.deleteWord(word);
+    }
+
+    public static void main(String[] args) {
+        GatewayServer gatewayServer = new GatewayServer(new DictionaryManager(null, null));
+        gatewayServer.start();
+        System.out.println("Gateway Server Started");
     }
 }

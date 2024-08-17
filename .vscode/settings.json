@@ -4,6 +4,8 @@
     "python.analysis.typeCheckingMode": "off",
     "java.compile.nullAnalysis.mode": "disabled",
     "java.project.sourcePaths": [
-        "LanguageTool"
+        "LanguageTool",
+        "GaRP/LanguageTool/LanguageTool_Java/src/main/java/com/example",
+        "GaRP"
     ]
 }

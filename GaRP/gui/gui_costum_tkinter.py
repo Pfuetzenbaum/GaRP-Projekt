@@ -18,7 +18,8 @@ settings = {
     "starting_page": 1,
     "ending_page": 100,
     "check_fontname": False,
-    "first_lines_to_skip": 0
+    "first_lines_to_skip": 0,
+    "last_lines_to_skip": 0
 }
 
 # Global variables
@@ -77,7 +78,8 @@ def process_file():
             starting_page=settings["starting_page"],
             ending_page=settings["ending_page"],
             check_fontname=settings["check_fontname"],
-            first_lines_to_skip=settings["first_lines_to_skip"]
+            first_lines_to_skip=settings["first_lines_to_skip"],
+            last_lines_to_skip=["last_lines_to_skip"]
         )
         pdf_content_textbox.delete("1.0", "end")
         pdf_content_textbox.insert("1.0", extracted_text)
@@ -93,11 +95,12 @@ def open_settings_window():
         settings["ending_page"] = int(ending_page_entry.get())
         settings["check_fontname"] = check_fontname_var.get()
         settings["first_lines_to_skip"] = int(first_lines_to_skip_entry.get())
+        settings["last_lines_to_skip"] = int(last_lines_to_skip_entry.get())
         settings_window.destroy()
 
     settings_window = ctk.CTkToplevel(root)
     settings_window.title("Einstellungen")
-    settings_window.geometry("600x400")
+    settings_window.geometry("400x600")
 
     ctk.CTkLabel(settings_window, text="Starting Page:").pack(padx=5, pady=5)
     starting_page_entry = ctk.CTkEntry(settings_window)
@@ -118,6 +121,11 @@ def open_settings_window():
     first_lines_to_skip_entry = ctk.CTkEntry(settings_window)
     first_lines_to_skip_entry.insert(0, settings["first_lines_to_skip"])
     first_lines_to_skip_entry.pack(padx=5, pady=5)
+
+    ctk.CTkLabel(settings_window, text="Last Lines to Skip:").pack(padx=5, pady=5)
+    last_lines_to_skip_entry = ctk.CTkEntry(settings_window)
+    last_lines_to_skip_entry.insert(0, settings["last_lines_to_skip"])
+    last_lines_to_skip_entry.pack(padx=5, pady=5)
 
     ctk.CTkButton(settings_window, text="Save", command=save_settings).pack(side="bottom", padx=5, pady=20)
 

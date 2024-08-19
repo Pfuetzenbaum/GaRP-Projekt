@@ -1,3 +1,14 @@
 {
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    "python.analysis.autoImportCompletions": false,
+    "python.analysis.typeCheckingMode": "off",
+    "java.compile.nullAnalysis.mode": "disabled",
+    "java.project.sourcePaths": [
+        "LanguageTool"
+    ],
+    "java.project.referencedLibraries": [
+            "lib/*.jar"
+        ]
+
+    
 }

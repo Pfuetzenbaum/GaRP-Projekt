@@ -1,0 +1,37 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "javac",
+            "args": [
+                "-cp",
+                "lib/*",
+                "-d",
+                "bin",
+                "src/**/*.java"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "problemMatcher": ["$javac"]
+        },
+        {
+            "label": "run",
+            "type": "shell",
+            "command": "java",
+            "args": [
+                "-cp",
+                "bin;lib/*",
+                "com.example.DictionaryManager"
+            ],
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}

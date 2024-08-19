@@ -54,7 +54,7 @@ def open_except_words():
     except_words_entry = ctk.CTkEntry(except_words_window)
     except_words_entry.pack(padx=5, pady=5)
 
-    ctk.CTkButton(except_words_window, text="Save", command=except_words_list).pack(side="bottom", padx=5, pady=20)
+    ctk.CTkButton(except_words_window, text="Speichern", command=except_words_list).pack(side="bottom", padx=5, pady=20)
 
     words_frame = ctk.CTkFrame(except_words_window)
     words_frame.pack(fill='both', expand=True, padx=5, pady=5)

@@ -3,8 +3,6 @@ package com.example;
 import java.io.IOException;
 import java.util.*;
 
-import py4j.GatewayServer;
-
 import org.languagetool.JLanguageTool;
 import org.languagetool.Language;
 import org.languagetool.rules.RuleMatch;
@@ -77,9 +75,5 @@ public class DictionaryManager {
         dictionaryHandler.deleteWord(word);
     }
 
-    public static void main(String[] args) {
-        GatewayServer gatewayServer = new GatewayServer(new DictionaryManager(null, null));
-        gatewayServer.start();
-        System.out.println("Gateway Server Started");
-    }
+
 }

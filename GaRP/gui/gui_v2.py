@@ -74,11 +74,11 @@ class SettingsWindow:
         self.settings_window.geometry("400x600")
 
         self.starting_page_label = ctk.CTkLabel(self.settings_window, text="Startseite:")
-        self.starting_page_label.pack(padx=5, pady=5)
+        self.starting_page_label.grid(row=0, column=0, padx=5, pady=5)
 
         self.starting_page_entry = ctk.CTkEntry(self.settings_window)
         self.starting_page_entry.insert(0, settings["starting_page"])
-        self.starting_page_entry.pack(padx=5, pady=5)
+        self.starting_page_entry.grid(row=0, column=1, padx=5, pady=5)
 
         self.ending_page_label = ctk.CTkLabel(self.settings_window, text="Endseite:")
         self.ending_page_label.pack(padx=5, pady=5)
@@ -216,6 +216,7 @@ class MainApplication:
             ctk.CTkLabel(error_window, text="Keine Datei ausgewählt!").pack(padx=5, pady=5)
 
     def check_spelling(self):
+        gateway.entry_point._methods.ch
         pass
 
     def open_settings_window(self):

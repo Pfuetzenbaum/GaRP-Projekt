@@ -75,7 +75,7 @@ public class DictionaryManager {
         for (RuleMatch match : matches) {
             String sentence = match.getSentence().toString();
             String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().get(0);
-            String affectedPart = sentence.substring(match.getFromPos(), match.getToPos());
+            String affectedPart = sentence.substring(match.getFromPosSentence(), match.getToPosSentence());
             filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart));
         }
         return filteredMatches;

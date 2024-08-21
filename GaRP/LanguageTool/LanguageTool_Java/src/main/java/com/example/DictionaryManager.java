@@ -13,6 +13,31 @@ public class DictionaryManager {
     private DictionaryFileHandler dictionaryHandler;
     private JLanguageTool languageTool;
 
+    // Klasse für die Rückgabe der gefilterten Matches
+    class FilteredRuleMatch {
+        private String sentence;
+        private String improvement;
+        private String affectedPart;
+    
+        public FilteredRuleMatch(String sentence, String improvement, String affectedPart) {
+            this.sentence = sentence;
+            this.improvement = improvement;
+            this.affectedPart = affectedPart;
+        }
+    
+        public String getSentence() {
+            return sentence;
+        }
+    
+        public String getImprovement() {
+            return improvement;
+        }
+    
+        public String getAffectedPart() {
+            return affectedPart;
+        }
+    }
+
     // Bei der Initialisierung wird das Dictionary eingelesen und die Wörter als Ausnahmen für die Rechtschreibprüfung hinzugefügt
     // Lanuage wird als allgemeines Objekt initialisiert, die spezifischen Sprachen erben von diesen und können so initialisiert werden
     // Für Deutsch: new GermanyGerman()
@@ -40,6 +65,20 @@ public class DictionaryManager {
     public List<RuleMatch> checkText(String text) throws IOException{
         List<RuleMatch> matches = languageTool.check(text);
         return matches;
+    }
+
+    // Methode zum Prüfen des Textes auf Rechtschreib-/Grammatikfehler und Rückgabe der gefilterten Matches
+    public List<FilteredRuleMatch> checkTextFiltered(String text) throws IOException {
+        List<RuleMatch> matches = languageTool.check(text);
+        List<FilteredRuleMatch> filteredMatches = new ArrayList<>();
+
+        for (RuleMatch match : matches) {
+            String sentence = match.getSentence().toString();
+            String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().get(0);
+            String affectedPart = sentence.substring(match.getFromPos(), match.getToPos());
+            filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart));
+        }
+        return filteredMatches;
     }
 
     // Methode zum Hinzufügen eines Wortes zum Dictionary zum dauerhaften Ignorieren

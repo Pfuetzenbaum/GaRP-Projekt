@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
 
+import com.example.DictionaryManager.FilteredRuleMatch;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -34,6 +36,23 @@ class DictionaryManagerTest {
         String text = "Alles purrfekt";
         List<RuleMatch> matches = dictionaryManager.checkText(text);
         assertEquals(6, matches.get(0).getFromPos());
+    }
+
+    @Test
+    void testCheckTextFiltered() throws IOException {
+        String text = "Dies ist ein Testttext mit einem Fehler.";
+        List<FilteredRuleMatch> filteredMatches = dictionaryManager.checkTextFiltered(text);
+
+        assertNotNull(filteredMatches);
+        assertFalse(filteredMatches.isEmpty());
+
+        for (FilteredRuleMatch match : filteredMatches) {
+            assertNotNull(match.getSentence());
+            assertNotNull(match.getImprovement());
+            assertNotNull(match.getAffectedPart());
+            assertNotNull(match.getShortMessage());
+            assertNotNull(match.getLongMessage());
+        }
     }
 
     // Wort zum Wörterbuch hinzufügen und anschließen prüfen ob es den Fehler noch anzeigt

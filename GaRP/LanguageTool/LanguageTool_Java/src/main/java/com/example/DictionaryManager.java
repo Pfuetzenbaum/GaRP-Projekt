@@ -86,7 +86,7 @@ public class DictionaryManager {
     
         for (RuleMatch match : matches) {
             String sentence = match.getSentence().toString();
-            String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().get(0);
+            String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().toString();
             String affectedPart = sentence.substring(match.getFromPosSentence(), match.getToPosSentence());
             String shortMessage = match.getShortMessage();
             String longMessage = match.getMessage();

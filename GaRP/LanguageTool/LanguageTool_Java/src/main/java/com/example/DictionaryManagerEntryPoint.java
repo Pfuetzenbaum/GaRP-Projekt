@@ -12,7 +12,7 @@ public class DictionaryManagerEntryPoint {
 
     public DictionaryManagerEntryPoint() throws IOException {
         // Pfad auf eigenem Rechner ändern -> Relativer Pfad funktioniert nicht
-        dictionaryManager = new DictionaryManager("/Users/luis/Library/CloudStorage/OneDrive-Personal/Dokumente/1_DHBW/5.Semester/Semesterprojekt/LanguageCheck/GaRP/LanguageTool/LanguageTool_Java/src/Dictionary/CustomDictionary", new GermanyGerman());
+        dictionaryManager = new DictionaryManager("GaRP-Projekt\\GaRP\\LanguageTool\\LanguageTool_Java\\src\\Dictionary\\CustomDictionary", new GermanyGerman());
     }
 
     public DictionaryManager getDictionaryManager() {

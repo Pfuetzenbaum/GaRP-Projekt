@@ -3,9 +3,9 @@ from tkinter import filedialog, Menu, Text
 import sys
 import os
 
-from py4j.java_gateway import JavaGateway
+from py4j.java_gateway import JavaGateway, GatewayParameters
 
-gateway = JavaGateway()
+gateway = JavaGateway(gateway_parameters=GatewayParameters(port=25333))
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 
@@ -26,7 +26,6 @@ file_path = None
 class ExceptWordsWindow:
     def __init__(self, root):
         self.root = root
-        self.words_to_except = []
         self.except_words_window = ctk.CTkToplevel(self.root)
         self.except_words_window.title("Wörter entfernen")
         self.except_words_window.geometry("600x400")
@@ -54,7 +53,7 @@ class ExceptWordsWindow:
     def except_words_list(self):
         word_to_except = self.except_words_entry.get()
         if word_to_except:
-            self.words_to_except.append(word_to_except)
+            words_to_except.append(word_to_except)
             self.except_words_entry.delete(0, 'end')
             self.update_except_words_list()
 
@@ -62,7 +61,7 @@ class ExceptWordsWindow:
         for widget in self.words_frame.winfo_children():
             widget.destroy()
 
-        for word in self.words_to_except:
+        for word in words_to_except:
             ctk.CTkLabel(self.words_frame, text=word).pack(anchor='w')
 
 
@@ -198,8 +197,9 @@ class MainApplication:
             self.file_label.configure(text=f"Datei: {self.file_path}")
 
     def process_file(self):
+        global extracted_text
         if self.file_path:
-            extracted_text = extract_text_from_pdf_structured(
+           extracted_text = extract_text_from_pdf_structured(
                 self.file_path,
                 starting_page=settings["starting_page"],
                 ending_page=settings["ending_page"],
@@ -207,8 +207,8 @@ class MainApplication:
                 first_lines_to_skip=settings["first_lines_to_skip"],
                 last_lines_to_skip=settings["last_lines_to_skip"]
             )
-            self.pdf_content_textbox.delete("1.0", "end")
-            self.pdf_content_textbox.insert("1.0", extracted_text)
+           self.pdf_content_textbox.delete("1.0", "end")
+           self.pdf_content_textbox.insert("1.0", extracted_text)
         else:
             error_window = ctk.CTkToplevel(self.root)
             error_window.title("Fehler")
@@ -216,8 +216,18 @@ class MainApplication:
             ctk.CTkLabel(error_window, text="Keine Datei ausgewählt!").pack(padx=5, pady=5)
 
     def check_spelling(self):
-        gateway.entry_point._methods.ch
-        pass
+
+        dictionary_manager_entry_point = gateway.entry_point
+
+        dictionary_manager = dictionary_manager_entry_point.getDictionaryManager()
+
+        # Beispiel: Aufrufen einer Methode von DictionaryManager
+        # Zum Beispiel, wenn es eine Methode `getWordList` gibt
+        word_list = dictionary_manager.checkTextFiltered(extracted_text)
+
+        # Ausgabe der Ergebnisse
+        print(extracted_text)
+        print(word_list.getFeatures)
 
     def open_settings_window(self):
         SettingsWindow(self.root)

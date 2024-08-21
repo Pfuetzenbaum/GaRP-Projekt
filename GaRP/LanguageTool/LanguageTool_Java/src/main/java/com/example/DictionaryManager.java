@@ -18,11 +18,15 @@ public class DictionaryManager {
         private String sentence;
         private String improvement;
         private String affectedPart;
+        private String shortMessage;
+        private String longMessage;
     
-        public FilteredRuleMatch(String sentence, String improvement, String affectedPart) {
+        public FilteredRuleMatch(String sentence, String improvement, String affectedPart, String shortMessage, String longMessage) {
             this.sentence = sentence;
             this.improvement = improvement;
             this.affectedPart = affectedPart;
+            this.shortMessage = shortMessage;
+            this.longMessage = longMessage;
         }
     
         public String getSentence() {
@@ -35,6 +39,14 @@ public class DictionaryManager {
     
         public String getAffectedPart() {
             return affectedPart;
+        }
+    
+        public String getShortMessage() {
+            return shortMessage;
+        }
+    
+        public String getLongMessage() {
+            return longMessage;
         }
     }
 
@@ -71,12 +83,14 @@ public class DictionaryManager {
     public List<FilteredRuleMatch> checkTextFiltered(String text) throws IOException {
         List<RuleMatch> matches = languageTool.check(text);
         List<FilteredRuleMatch> filteredMatches = new ArrayList<>();
-
+    
         for (RuleMatch match : matches) {
             String sentence = match.getSentence().toString();
             String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().get(0);
             String affectedPart = sentence.substring(match.getFromPosSentence(), match.getToPosSentence());
-            filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart));
+            String shortMessage = match.getShortMessage();
+            String longMessage = match.getMessage();
+            filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart, shortMessage, longMessage));
         }
         return filteredMatches;
     }

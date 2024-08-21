@@ -85,12 +85,18 @@ public class DictionaryManager {
         List<FilteredRuleMatch> filteredMatches = new ArrayList<>();
     
         for (RuleMatch match : matches) {
-            String sentence = match.getSentence().toString();
-            String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().toString();
-            String affectedPart = sentence.substring(match.getFromPosSentence(), match.getToPosSentence());
-            String shortMessage = match.getShortMessage();
-            String longMessage = match.getMessage();
-            filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart, shortMessage, longMessage));
+            int fromPos = match.getFromPosSentence();
+            int toPos = match.getToPosSentence();
+            
+            // Überprüfen, ob die Indizes gültig sind
+            if (fromPos >= 0 && toPos >= 0 && fromPos < toPos && toPos <= match.getSentence().toString().length()) {
+                String sentence = match.getSentence().toString();
+                String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().toString();
+                String affectedPart = sentence.substring(fromPos, toPos);
+                String shortMessage = match.getShortMessage();
+                String longMessage = match.getMessage();
+                filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart, shortMessage, longMessage));
+            }
         }
         return filteredMatches;
     }

@@ -40,7 +40,7 @@ class DictionaryManagerTest {
 
     @Test
     void testCheckTextFiltered() throws IOException {
-        String text = "Dies ist ein Testttext mit einem Fehler.";
+        String text = "Hallo ich bin eine Testdatei und ich besitse einen Rechtschreibfehler und ein  Grammtikfehler";
         List<FilteredRuleMatch> filteredMatches = dictionaryManager.checkTextFiltered(text);
 
         assertNotNull(filteredMatches);

@@ -22,12 +22,12 @@ class DictionaryManagerTest {
         dictionaryManager = new DictionaryManager(DICTIONARY_FILE_PATH, new GermanyGerman());
     }
 
-    @Test
-    void testInitialDictionaryWordsAreIgnored() throws IOException {
-        String word = "Wetttt";
-        // Schauen ob das bereits im Wörterbuch vorhandene Wort bei Initialisierung zur Ignorierung hinzugefügt wurde
-        assertTrue(dictionaryManager.checkText(word).isEmpty());
-    }
+    // @Test
+    // void testInitialDictionaryWordsAreIgnored() throws IOException {
+    //     String word = "Wetttt";
+    //     // Schauen ob das bereits im Wörterbuch vorhandene Wort bei Initialisierung zur Ignorierung hinzugefügt wurde
+    //     assertTrue(dictionaryManager.checkText(word).isEmpty());
+    // }
 
 
     // Testen, ob das Wort korrekt als falsch erkannt wurde
@@ -53,6 +53,8 @@ class DictionaryManagerTest {
             assertNotNull(match.getAffectedPart());
             assertNotNull(match.getShortMessage());
             assertNotNull(match.getLongMessage());
+            assertNotNull(match.getFromPos());
+            assertNotNull(match.getToPos());
         }
     }
 

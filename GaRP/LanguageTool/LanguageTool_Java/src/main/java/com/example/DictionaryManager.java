@@ -20,33 +20,45 @@ public class DictionaryManager {
         private String affectedPart;
         private String shortMessage;
         private String longMessage;
-    
-        public FilteredRuleMatch(String sentence, String improvement, String affectedPart, String shortMessage, String longMessage) {
+        private int fromPos;
+        private int toPos;
+
+        public FilteredRuleMatch(String sentence, String improvement, String affectedPart, String shortMessage, String longMessage, int fromPos, int toPos) {
             this.sentence = sentence;
             this.improvement = improvement;
             this.affectedPart = affectedPart;
             this.shortMessage = shortMessage;
             this.longMessage = longMessage;
+            this.fromPos = fromPos;
+            this.toPos = toPos;
         }
-    
+
         public String getSentence() {
             return sentence;
         }
-    
+
         public String getImprovement() {
             return improvement;
         }
-    
+
         public String getAffectedPart() {
             return affectedPart;
         }
-    
+
         public String getShortMessage() {
             return shortMessage;
         }
-    
+
         public String getLongMessage() {
             return longMessage;
+        }
+
+        public int getFromPos() {
+            return fromPos;
+        }
+
+        public int getToPos() {
+            return toPos;
         }
     }
 
@@ -85,17 +97,19 @@ public class DictionaryManager {
         List<FilteredRuleMatch> filteredMatches = new ArrayList<>();
     
         for (RuleMatch match : matches) {
-            int fromPos = match.getFromPosSentence();
-            int toPos = match.getToPosSentence();
+            int fromPosSentence = match.getFromPosSentence();
+            int toPosSentence = match.getToPosSentence();
             
             // Überprüfen, ob die Indizes gültig sind
-            if (fromPos >= 0 && toPos >= 0 && fromPos < toPos && toPos <= match.getSentence().toString().length()) {
+            if (fromPosSentence >= 0 && toPosSentence >= 0 && fromPosSentence < toPosSentence && toPosSentence <= match.getSentence().toString().length()) {
                 String sentence = match.getSentence().getText();
                 String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().toString();
-                String affectedPart = sentence.substring(fromPos, toPos);
+                String affectedPart = sentence.substring(fromPosSentence, toPosSentence);
                 String shortMessage = match.getShortMessage();
                 String longMessage = match.getMessage();
-                filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart, shortMessage, longMessage));
+                int fromPos = match.getFromPos();
+                int toPos = match.getToPos();
+                filteredMatches.add(new FilteredRuleMatch(sentence, improvement, affectedPart, shortMessage, longMessage,fromPos, toPos));
             }
         }
         return filteredMatches;

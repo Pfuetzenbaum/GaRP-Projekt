@@ -46,6 +46,7 @@ class DictionaryManagerTest {
         assertNotNull(filteredMatches);
         assertFalse(filteredMatches.isEmpty());
 
+
         for (FilteredRuleMatch match : filteredMatches) {
             assertNotNull(match.getSentence());
             assertNotNull(match.getImprovement());

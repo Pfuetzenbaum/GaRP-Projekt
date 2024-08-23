@@ -90,7 +90,7 @@ public class DictionaryManager {
             
             // Überprüfen, ob die Indizes gültig sind
             if (fromPos >= 0 && toPos >= 0 && fromPos < toPos && toPos <= match.getSentence().toString().length()) {
-                String sentence = match.getSentence().toString();
+                String sentence = match.getSentence().getText();
                 String improvement = match.getSuggestedReplacements().isEmpty() ? "" : match.getSuggestedReplacements().toString();
                 String affectedPart = sentence.substring(fromPos, toPos);
                 String shortMessage = match.getShortMessage();

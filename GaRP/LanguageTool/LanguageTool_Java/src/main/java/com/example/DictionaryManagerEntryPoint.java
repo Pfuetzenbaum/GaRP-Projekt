@@ -11,7 +11,6 @@ public class DictionaryManagerEntryPoint {
     private DictionaryManager dictionaryManager;
 
     public DictionaryManagerEntryPoint() throws IOException {
-        // Pfad auf eigenem Rechner ändern -> Relativer Pfad funktioniert nicht
         dictionaryManager = new DictionaryManager("GaRP-Projekt\\GaRP\\LanguageTool\\LanguageTool_Java\\src\\Dictionary\\CustomDictionary", new GermanyGerman());
     }
 

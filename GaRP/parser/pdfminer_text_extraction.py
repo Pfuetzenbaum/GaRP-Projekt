@@ -170,9 +170,9 @@ def main():
     plain_text = ""
 
     # Einstellungen für die Textextraktion, abhängig von der PDF-Datei
-    filename = "GaRP\\parser\\test_files\\sample06.pdf"
-    starting_page = 1
-    ending_page = 1
+    filename = "GaRP\\parser\\test_files\\PA2_Version_7_0.pdf"
+    starting_page = 6
+    ending_page = 10
     
     # Anzahl der Zeilen, die zu Beginn jeder Seite übersprungen werden sollen
     first_lines_to_skip = 0
@@ -182,7 +182,7 @@ def main():
 
     # True: Strukturiert nach Schriftart und Schriftgröße
     # False: Unstrukturiert, nur Seitenweise Extraktion
-    extract_structured = False
+    extract_structured = True
 
     # Notwendig, wenn extract_structured = True
     # True: Gruppierung nach Schriftart und Schriftgröße

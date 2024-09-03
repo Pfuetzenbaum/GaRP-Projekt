@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from tkinter import filedialog, Menu, Text, Listbox, Toplevel
+from tkinter import filedialog, Menu, Text, Listbox, ttk
 import sys
 import os
 
@@ -20,15 +20,17 @@ class MainApplication:
         self.file_path = None
         self.create_widgets()
         self.result_labels = []
-        self.spelling_errors = []
         self.settings = Settings()
         self.except_words = []
         self.extracted_text = ""
+            #dictionary_manager_entry_point = gateway.entry_point
+            #dictionary_manager = dictionary_manager_entry_point.getDictionaryManager()
+        self.dictionary_manager = gateway.entry_point.getDictionaryManager()
 
     def create_widgets(self):
         try:
             self.root.title("PDF Rechtschreib- & Grammatikprüfung")
-            self.root.geometry("1200x800")
+            #self.root.wm_attributes("-top", True)
 
             ctk.set_appearance_mode("system")
             ctk.set_default_color_theme("green")
@@ -77,7 +79,6 @@ class MainApplication:
             content_label.pack(anchor='w', pady=5, padx=10)
 
             self.pdf_content_textbox = Text(content_frame, height=10, wrap='word', borderwidth=1, relief='solid')
-            self.pdf_content_textbox.tag_config("error", foreground="red")
             self.pdf_content_textbox.pack(padx=5, pady=5, fill='both', expand=True)
 
             check_button = ctk.CTkButton(content_frame, text="Überprüfen", font=('Arial', 14), command=self.check_spelling)
@@ -88,12 +89,20 @@ class MainApplication:
 
             self.error_listbox = Listbox(self.right_frame)
             self.error_listbox.pack(fill="both", expand=True, padx=10, pady=10)
-            self.error_listbox.bind('<<ListboxSelect>>', self.show_error_details)
+            self.error_listbox.bind('<<ListboxSelect>>', self.show_spellcheck_details)
+
         except Exception as e:
             self.show_error_message("Fehler beim Erstellen der Oberfläche", str(e))
 
     def upload_file(self):
         try:
+            # Leere die except_words Liste
+            self.except_words = []
+                
+            # Aktualisiere die except_words Liste in der Oberfläche
+            if hasattr(self, 'except_words_window'):
+                self.except_words_window.update_except_words_list()
+
             self.file_path = filedialog.askopenfilename(filetypes=[("PDF-Dateien", "*.pdf"), ("Alle Dateien", "*.*")])
             if self.file_path:
                 self.file_label.configure(text=f"Datei: {self.file_path}")
@@ -103,13 +112,7 @@ class MainApplication:
     def process_file(self):
         try:
             if self.file_path:
-                # Leere die except_words Liste
-                self.except_words = []
-                
-                # Aktualisiere die except_words Liste in der Oberfläche
-                if hasattr(self, 'except_words_window'):
-                    self.except_words_window.update_except_words_list()
-                
+                                
                 extracted_text = extract_text_from_pdf_structured(
                     self.file_path,
                     starting_page=self.settings.starting_page,
@@ -120,6 +123,7 @@ class MainApplication:
                 )
                 self.pdf_content_textbox.delete("1.0", "end")
                 self.pdf_content_textbox.insert("1.0", extracted_text)
+                self.pdf_content_textbox.config(state="normal")
             else:
                 error_window = ctk.CTkToplevel(self.root)
                 error_window.title("Fehler")
@@ -129,71 +133,97 @@ class MainApplication:
             self.show_error_message("Fehler beim Verarbeiten der Datei", str(e))
 
     def check_spelling(self):
+
+        self.error_listbox.delete(0, 'end')
+
+        #Alle Tags entfernen
+        for tag in self.pdf_content_textbox.tag_names():
+            self.pdf_content_textbox.tag_remove(tag, "1.0", "end")
+
         try:
-            dictionary_manager_entry_point = gateway.entry_point
-            dictionary_manager = dictionary_manager_entry_point.getDictionaryManager()
-
             extracted_text = self.pdf_content_textbox.get("1.0", "end-1c")
-            word_list = dictionary_manager.checkTextFiltered(extracted_text)
+            word_list = self.dictionary_manager.checkTextFiltered(extracted_text)
 
-            # Entferne alte Einträge
-            self.error_listbox.delete(0, 'end')
-            self.spelling_errors.clear()
+            self.error_list = []
 
             # Füge die gefundenen Fehler zur Liste hinzu
             for word in word_list:
-                result_text = (
-                    f"Verbesserung: {word.getImprovement()}\n"
-                    f"Betroffener Teil: {word.getAffectedPart()}\n"
-                    f"Kurzmeldung: {word.getShortMessage()}\n"
-                    f"Lange Meldung: {word.getLongMessage()}\n"
-                    f"From Pos: {word.getFromPos()}\n"
-                    f"To Pos: {word.getToPos()}"
-                )
 
+                affected_part = word.getAffectedPart()
+                short_message = word.getShortMessage()
+                from_pos = word.getFromPos()
+                to_pos = word.getToPos()
+                           
                 # Füge den Fehler zur Listbox hinzu (nur Kurzmeldung zur Übersicht)
-                self.error_listbox.insert('end', f"{word.getShortMessage()} - {word.getLongMessage()}")
-
-                # Speichere den gesamten Fehler zur späteren Anzeige
-                self.spelling_errors.append(result_text)
+                self.error_listbox.insert('end', f"{affected_part} - {short_message}")
+                self.error_list.append(word)
 
                 # Binde die Auswahl-Events der Listbox neu, um sicherzustellen, dass sie korrekt funktionieren
-                self.error_listbox.bind('<<ListboxSelect>>', self.show_error_details)
+                self.error_listbox.bind('<<ListboxSelect>>', self.show_spellcheck_details)
 
                 # Markiere den Fehler im Textfeld
-                self.highlight_error(word)
-                #self.pdf_content_textbox.tag_add("error", f"1.{word.getFromPos()}", f"1.{word.getToPos()}")
-                #self.pdf_content_textbox.tag_config("error", background="#FFA07A")
+                self.highlight_error(from_pos, to_pos, short_message)
+                
         except Exception as e:
             self.show_error_message("Fehler beim Überprüfen der Rechtschreibung", str(e))
+        
     
-    def highlight_error(self, word):
-        from_pos = word.getFromPos()
-        to_pos = word.getToPos()
+    def highlight_error(self, from_pos, to_pos, short_message):
 
-        # Remove any existing "error" tag from the range
-        self.pdf_content_textbox.tag_remove("error", f"1.{word.getFromPos()}", f"1.{word.getToPos()}")
-       
-        # Apply the "error" tag to the range
-        self.pdf_content_textbox.tag_add("error", f"1.{word.getFromPos()}", f"1.{word.getToPos()}")
+        # Finden Sie die Zeile und Spalte des Fehlers im Textfeld
+        lines = self.pdf_content_textbox.get("1.0", "end-1c").split("\n")
+        line_length = 0
+        line_number = 1
+        for line in lines:
+            if line_length + len(line) >= from_pos:
+                break
+            line_length += len(line) + 1
+            line_number += 1
 
+        # Berechnen Sie die Spalte des Fehlers in der Zeile
+        column = from_pos - line_length
 
-    def show_error_details(self, event):
+         # Markieren Sie den Fehler im Textfeld
+        self.pdf_content_textbox.tag_config("spelling_error", background="#FF0000") #Rot
+        self.pdf_content_textbox.tag_config("other_error", background="#FFA07A") #Orange
+
+        if short_message == 'Rechtschreibfehler':
+
+            self.pdf_content_textbox.tag_remove("spelling_error", f"{line_number}.{column}", f"{line_number}.{column + (to_pos - from_pos)}")
+            self.pdf_content_textbox.tag_add("spelling_error", f"{line_number}.{column}", f"{line_number}.{column + (to_pos - from_pos)}")
+            
+        else:
+
+            self.pdf_content_textbox.tag_remove("other_error", f"{line_number}.{column}", f"{line_number}.{column + (to_pos - from_pos)}")
+            self.pdf_content_textbox.tag_add("other_error", f"{line_number}.{column}", f"{line_number}.{column + (to_pos - from_pos)}")
+            
+
+    def show_spellcheck_details(self, event):
         try:
             selected_index = self.error_listbox.curselection()
             if selected_index:
-                # Zeige die vollständige Meldung an
-                selected_error = self.spelling_errors[selected_index[0]]
+                # Retrieve the entire error object
+                selected_error = self.error_list[selected_index[0]]
+                affected_part = selected_error.getAffectedPart()
 
                 # Neues Fenster für detaillierte Fehlerbeschreibung
-                error_window = Toplevel(self.root)
-                error_window.title("Fehlerdetails")
-                error_window.geometry("400x300")
+                spelling_error_window = ctk.CTkToplevel(self.root)
+                spelling_error_window.title("Fehlerdetails")
+                spelling_error_window.geometry("400x300")
+                spelling_error_window.attributes("-topmost", True) # Setze das Fenster auf die oberste Ebene
 
-                error_details = Text(error_window, wrap='word', borderwidth=1, relief='solid')
-                error_details.insert("1.0", selected_error)
-                error_details.config(state="disabled")
+                error_details = ctk.CTkTextbox(spelling_error_window, wrap='word', border_width=1)
+                error_details.insert("1.0", f"Verbesserung: {selected_error.getImprovement()}\n"
+                                        f"Betroffener Teil: {affected_part}\n"
+                                        f"Kurzmeldung: {selected_error.getShortMessage()}\n"
+                                        f"Lange Meldung: {selected_error.getLongMessage()}\n"
+                                        f"From Pos: {selected_error.getFromPos()}\n"
+                                        f"To Pos: {selected_error.getToPos()}")
+                error_details.configure(state="disabled")
                 error_details.pack(fill="both", expand=True, padx=10, pady=10)
+
+                add_word_button = ctk.CTkButton(spelling_error_window, text="Dauerhaft hinzufügen", font=('Arial', 14), command= self.dictionary_manager.addWord(affected_part))
+                add_word_button.pack(padx=10, pady=10)
         except Exception as e:
             self.show_error_message("Fehler bei der Anzeige von Fehlerdetails", str(e))
 
@@ -201,9 +231,12 @@ class MainApplication:
         error_window = ctk.CTkToplevel(self.root)
         error_window.title(title)
         error_window.geometry("400x200")
+        error_window.attributes("-topmost", True)  # Setze das Fenster auf die oberste Ebene
 
         error_label = ctk.CTkLabel(error_window, text=message, wraplength=380)
         error_label.pack(padx=10, pady=10)
+        
+
 
     def open_settings_window(self):
         SettingsWindow(self.root, self)

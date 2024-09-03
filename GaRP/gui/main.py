@@ -91,6 +91,9 @@ class MainApplication:
             self.error_listbox.pack(fill="both", expand=True, padx=10, pady=10)
             self.error_listbox.bind('<<ListboxSelect>>', self.show_spellcheck_details)
 
+            export_button = ctk.CTkButton(self.right_frame, text="Fehler exportieren", font=('Arial', 14), command=self.export_errors)
+            export_button.pack(pady=10)
+
         except Exception as e:
             self.show_error_message("Fehler beim Erstellen der Oberfläche", str(e))
 
@@ -236,13 +239,23 @@ class MainApplication:
         error_label = ctk.CTkLabel(error_window, text=message, wraplength=380)
         error_label.pack(padx=10, pady=10)
         
-
+    def export_errors(self):
+        try:
+            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Textdateien", "*.txt")])
+            if file_path:
+                with open(file_path, "w", encoding="utf-8") as f:
+                    for error in self.error_list:
+                        f.write(f"{error.getAffectedPart()} - {error.getShortMessage()}\n")
+                self.show_error_message("Erfolgreich exportiert", "Die Fehler wurden erfolgreich in eine Textdatei exportiert.")
+        except Exception as e:
+            self.show_error_message("Fehler beim Exportieren", str(e))
 
     def open_settings_window(self):
         SettingsWindow(self.root, self)
 
     def open_except_words(self):
         ExceptWordsWindow(self.root, self)
+
 
 
 if __name__ == "__main__":

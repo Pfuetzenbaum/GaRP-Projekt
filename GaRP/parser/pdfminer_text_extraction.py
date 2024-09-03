@@ -80,7 +80,7 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                                     current_char, current_fontname, current_size = handle_font_change(character, current_fontname, current_size)
                                 else:
                                     # Aufrufen der Funktion zum Überprüfen der Schriftgröße
-                                    current_char, current_fontname, current_size = handle_size_change(character, current_size)
+                                    current_char, current_size = handle_size_change(character, current_size)
 
                                 # Hinzufügen des aktuellen Zeichens zum extrahierten Text
                                 extracted_text += current_char

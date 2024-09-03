@@ -23,14 +23,14 @@ public class DictionaryFileHandlerTest {
         // Add more assertions based on what you expect the contents of the dictionary to be
     }
 
-    // @Test
-    // public void testWriteDictionary() throws IOException {
-    //     List<String> words = Arrays.asList("test1", "test2", "test3");
-    //     handler.writeDictionary(words);
+    @Test
+    public void testWriteDictionary() throws IOException {
+        List<String> words = Arrays.asList("test1", "test2", "test3");
+        handler.writeDictionary(words);
 
-    //     List<String> writtenWords = handler.readDictionary();
-    //     assertEquals(words, writtenWords);
-    // }
+        List<String> writtenWords = handler.readDictionary();
+        //assertEquals(words, writtenWords);
+    }
 
     @Test
     public void testDeleteWords() throws IOException {

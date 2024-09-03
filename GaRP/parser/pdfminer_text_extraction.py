@@ -153,9 +153,7 @@ def extract_text_from_pdf_pagewise(pdf_path, starting_page=1, ending_page=100, f
                         extracted_text += text_line.get_text()
 
                         # Entfernen von Trennstrichen, doppelten Leerzeichen oder Zeilenumbrüchen am Zeilenende
-                        if extracted_text.endswith("- "):
-                            extracted_text = extracted_text[:-2]
-                        elif extracted_text.endswith("\n"):
+                        if extracted_text.endswith("\n"):
                             extracted_text = extracted_text[:-1]
                             extracted_text += " "
                         
@@ -231,6 +229,7 @@ def clean_text(cleaned_text):
     """
     # Behandlung von doppelten Leerzeichen
     cleaned_text = cleaned_text.replace("  ", " ")
+    cleaned_text = cleaned_text.replace("- ", " ")
 
     # Behandlung von Fehlern bei Umlauten
     cleaned_text = cleaned_text.replace("¨u", "ü")

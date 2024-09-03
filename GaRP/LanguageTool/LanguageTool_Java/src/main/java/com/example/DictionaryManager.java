@@ -63,7 +63,7 @@ public class DictionaryManager {
     }
 
     // Bei der Initialisierung wird das Dictionary eingelesen und die Wörter als Ausnahmen für die Rechtschreibprüfung hinzugefügt
-    // Lanuage wird als allgemeines Objekt initialisiert, die spezifischen Sprachen erben von diesen und können so initialisiert werden
+    // Language wird als allgemeines Objekt initialisiert, die spezifischen Sprachen erben von diesen und können so initialisiert werden
     // Für Deutsch: new GermanyGerman()
     // Für Englisch: new BritishEnglish()
     public DictionaryManager(String dictionaryFilePath, Language language) throws IOException {
@@ -84,8 +84,6 @@ public class DictionaryManager {
     }
 
     // Methode zum Prüfen des Textes auf Rechtschreib-/Grammatikfehler
-    // WIP: Mit Robin abkkären, welche Rückgabewerte benötigt werden
-    // Wenn das eigentliche fehlerhafte Wort zurückgegeben werden soll, muss eine Anpassung vorgenommen werden
     public List<RuleMatch> checkText(String text) throws IOException{
         List<RuleMatch> matches = languageTool.check(text);
         return matches;
@@ -116,8 +114,6 @@ public class DictionaryManager {
     }
 
     // Methode zum Hinzufügen eines Wortes zum Dictionary zum dauerhaften Ignorieren
-    // WIP: Funktion einbauen: Nur Fehler die Rechtschreibfehler sind, dürfen hinzugefügt werden -> 
-    // Sonst werden Kommafehler etc. auch hinzugefügt -> Mit Robin abklären -> Fügt er vlt. den Button dynamisch ein?
     public void addWord(String word) throws IOException {
         List<String> words = dictionaryHandler.readDictionary();
         words.add(word);
@@ -131,7 +127,6 @@ public class DictionaryManager {
     }
 
     // Methode zum Ignorieren eines Wortes in der aktuellen Session
-    // WIP: Funktion einbauen: Nur Fehler die Rechtschreibfehler sind, dürfen hinzugefügt werden
     public void ignoreWordInSession(String word) {
         for (Rule rule : languageTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
@@ -142,11 +137,13 @@ public class DictionaryManager {
     }
 
     // Methode zum Entfernen eines Wortes aus dem Dictionary
-    // Nur Funktionell nach Neustart des LTs 
-    // Da hier das Dictionary neu eingelesen werden muss
+    // Nur Funktionell nach Neustart des LTs, da hier das Dictionary neu eingelesen werden muss
     public void removeWord(String word) throws IOException {
         dictionaryHandler.deleteWord(word);
     }
 
-
+    // Methode zum Auslesen des Dictionaries
+    public List<String> readDictionary() throws IOException {
+        return dictionaryHandler.readDictionary();
+    }
 }

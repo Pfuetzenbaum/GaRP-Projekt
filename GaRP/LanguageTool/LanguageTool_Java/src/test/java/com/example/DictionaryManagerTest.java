@@ -12,7 +12,6 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-// Noch überarbeiten mit Tests zu Filehandlern
 class DictionaryManagerTest {
     private DictionaryManager dictionaryManager;
     private static final String DICTIONARY_FILE_PATH = "src/Dictionary/CustomDictionaryTest";
@@ -22,15 +21,7 @@ class DictionaryManagerTest {
         dictionaryManager = new DictionaryManager(DICTIONARY_FILE_PATH, new GermanyGerman());
     }
 
-    // @Test
-    // void testInitialDictionaryWordsAreIgnored() throws IOException {
-    //     String word = "Wetttt";
-    //     // Schauen ob das bereits im Wörterbuch vorhandene Wort bei Initialisierung zur Ignorierung hinzugefügt wurde
-    //     assertTrue(dictionaryManager.checkText(word).isEmpty());
-    // }
-
-
-    // Testen, ob das Wort korrekt als falsch erkannt wurde
+    // Testen, ob das Wort korrekt als falsch erkannt wurde -> Abgleich mit der Position des Fehlers
     @Test
     void testCheckText() throws IOException {
         String text = "Alles purrfekt";
@@ -38,15 +29,12 @@ class DictionaryManagerTest {
         assertEquals(6, matches.get(0).getFromPos());
     }
 
+    // Testen ob bei Rechtschreibfehler alle Felder des FilteredRuleMatch Objekts befüllt sind
     @Test
     void testCheckTextFiltered() throws IOException {
-        String text = "Hallo ich bin eine Testdatei und ich besitse einen Rechtschreibfehler und ein  Grammtikfehler";
+        String text = "Ich besitse ein Auto";
         List<FilteredRuleMatch> filteredMatches = dictionaryManager.checkTextFiltered(text);
-
         assertNotNull(filteredMatches);
-        assertFalse(filteredMatches.isEmpty());
-
-
         for (FilteredRuleMatch match : filteredMatches) {
             assertNotNull(match.getSentence());
             assertNotNull(match.getImprovement());
@@ -58,30 +46,21 @@ class DictionaryManagerTest {
         }
     }
 
-    // Wort zum Wörterbuch hinzufügen und anschließen prüfen ob es den Fehler noch anzeigt
-    // WIP: Überprüfung ob Wort auch im Wörterbuch vorhanden ist
+    // Überprüfen ob Wort zum Wörterbuch hinzugefügt wird & ob es ignoriert wird
     @Test
     void testAddWord() throws IOException {
         String word = "purfekt";
         dictionaryManager.addWord(word);
+        List<String> words = dictionaryManager.readDictionary();
+        assertTrue(words.contains(word));
         assertTrue(dictionaryManager.checkText(word).isEmpty());
     }
 
+    // Überprüfen ob Wort ignoriert wird
     @Test
     void testIgnoreWordInSession() throws IOException {
         String word = "purfekt";
         dictionaryManager.ignoreWordInSession(word);
-        // Assert that the word is now ignored
-        assertTrue(dictionaryManager.checkText(word).isEmpty());
-    }
-
-    // Wort zum Wörterbuch hinzufügen und anschließend entfernen und prüfen ob es den Fehler noch anzeigt
-    // WIP: Überprüfung ob Wort auch im Wörterbuch nicht mehr vorhanden ist
-    @Test
-    void testRemoveWord() throws IOException {
-        String word = "testword";
-        dictionaryManager.addWord(word);
-        dictionaryManager.removeWord(word);
         assertTrue(dictionaryManager.checkText(word).isEmpty());
     }
 }

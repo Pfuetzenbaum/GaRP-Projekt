@@ -4,8 +4,7 @@ import java.nio.file.*;
 import java.io.IOException;
 import java.util.*;
 
-// Klasse zum Lesen und Schreiben von Wörtern in ein Dictionary
-// WIP: Functionality to not add double words?
+// Klasse zum Lesen und Schreiben von Wörtern in ein Dictionary-File
 public class DictionaryFileHandler {
     private Path dictionaryPath;
 

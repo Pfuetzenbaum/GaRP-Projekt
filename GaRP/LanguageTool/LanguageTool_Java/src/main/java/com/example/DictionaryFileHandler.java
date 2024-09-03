@@ -24,6 +24,6 @@ public class DictionaryFileHandler {
     public void deleteWord(String word) throws IOException {
         List<String> words = readDictionary();
         words.remove(word);
-        writeDictionary(words);
+        Files.write(dictionaryPath, words);
     }
 }

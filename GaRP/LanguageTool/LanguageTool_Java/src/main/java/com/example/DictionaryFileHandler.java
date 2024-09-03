@@ -18,7 +18,7 @@ public class DictionaryFileHandler {
     }
 
     public void writeDictionary(List<String> words) throws IOException {
-        Files.write(dictionaryPath, words);
+        Files.write(dictionaryPath, words,StandardOpenOption.APPEND);
     }
 
     public void deleteWord(String word) throws IOException {

@@ -21,7 +21,7 @@ public class Demo
         GermanyGerman germany = new GermanyGerman();
         String text = "Hir is ein Text voler Fehler. Der Hund isst sein lecker Steak und der Katze sitzt auf dem Sofa. Ich habe gehen in die Geschäft um Milch zu kaufen, aber es regnet draussen. \"Warum ist das Wetter so schlecht?\", frag er sich. Dann sah ich ein Freund und wir gingen zusammen. Er sagte, dass er hat eine neue Auto. Der Auto ist sehr schnell und rot. Wir haben spielen Fußball im Park und trinken Cola. Es war ein gut Tag, aber die Sonne scheint nicht. Also, das war mein Tag. Viellecht machen wir das wieder bald!";
         // Test 1 -> Temporäres Hinzufügen von Wörtern
-        System.out.println("1. Check -> Rappenpappenvoll -> Fehler");
+        System.out.println("1. Check -> Hir -> Fehler");
         JLanguageTool langTool = new JLanguageTool(germany);
         // Ausgeben aktuell deaktivierter Regeln -> Müssen gegebenenfalls noch aktiviert werden
         // WIP: Beim Default werden einige Kommafehler nicht erkannt..., evtl. noch Regeln aktivieren?
@@ -40,13 +40,13 @@ public class Demo
         //langTool.activateLanguageModelRules(new File("/data/google-ngram-data"));
         for (Rule rule : langTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
-            List<String> wordsToIgnore = Arrays.asList("rappenpappenvoll");
-            ((SpellingCheckRule)rule).acceptPhrases(wordsToIgnore);
+            List<String> wordsToIgnore = Arrays.asList("Hir");
+            ((SpellingCheckRule)rule).addIgnoreTokens(wordsToIgnore);
             }
         }
         
         // 2. Check -> Rappenpappenvoll -> Kein Fehler
-        System.out.println("2. Check -> Rappenpappenvoll -> Kein Fehler");
+        System.out.println("2. Check -> Hir -> Kein Fehler");
         matches = langTool.check(text);
         for (RuleMatch match : matches) {
             System.out.println("Potential error at characters " +
@@ -56,6 +56,25 @@ public class Demo
             match.getSuggestedReplacements());
             }
         
+        // comment in to use statistical ngram data:
+        //langTool.activateLanguageModelRules(new File("/data/google-ngram-data"));
+        for (Rule rule : langTool.getAllActiveRules()) {
+            if (rule instanceof SpellingCheckRule) {
+            List<String> wordsToIgnore = Arrays.asList("is");
+            ((SpellingCheckRule)rule).addIgnoreTokens(wordsToIgnore);
+            }
+        }
+        
+        // 2. Check -> Rappenpappenvoll -> Kein Fehler
+        System.out.println("3. Check -> is -> Kein Fehler");
+        matches = langTool.check(text);
+        for (RuleMatch match : matches) {
+            System.out.println("Potential error at characters " +
+            match.getFromPos() + "-" + match.getToPos() + ": " +
+            match.getMessage());
+            System.out.println("Suggested correction(s): " +
+            match.getSuggestedReplacements());
+            }
         long endTime = System.currentTimeMillis();
         long executionTime = endTime - startTime;
         System.out.println("Execution time: " + executionTime + " milliseconds");

@@ -49,8 +49,7 @@ class SettingsWindow:
         self.save_button = ctk.CTkButton(self.settings_window, text="Speichern", command=self.save_settings)
         self.save_button.grid(row=5, column=0, columnspan=2, padx=5, pady=20)
 
-        self.settings_window.lift()
-        self.settings_window.focus_force()
+        self.settings_window.attributes("-topmost", True) # Setze das Fenster auf die oberste Ebene
 
     def save_settings(self):
         self.main_app.settings.starting_page = int(self.starting_page_entry.get())

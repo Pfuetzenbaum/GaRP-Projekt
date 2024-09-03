@@ -10,22 +10,23 @@ class ExceptWordsWindow:
         
 
         self.except_words_label = ctk.CTkLabel(self.except_words_window, text="Zu entfernendes Wort:")
-        self.except_words_label.pack(padx=5, pady=5)
+        self.except_words_label.grid(row=0, column=0, columnspan=1,padx=5, pady=5)
 
         self.except_words_entry = ctk.CTkEntry(self.except_words_window)
-        self.except_words_entry.pack(padx=5, pady=5)
-
-        self.process_button = ctk.CTkButton(self.except_words_window, text="Wort zur Liste hinzufügen", command=self.add_except_word)
-        self.process_button.pack(side="bottom", padx=5, pady=20)
-
-        self.save_button = ctk.CTkButton(self.except_words_window, text="Speichern & Datei neu verarbeiten", command=self.execute_except_words)
-        self.save_button.pack(side="bottom", padx=5, pady=20)
-
-        self.except_quotation_marks_button = ctk.CTkButton(self.except_words_window, text="Anführungszeichen entfernen", command=self.except_quotation_marks)
-        self.except_quotation_marks_button.pack(side="bottom", padx=5, pady=20)
+        self.except_words_entry.grid(row=0, column=1, columnspan=2, padx=5, pady=5)
+        self.except_words_entry.bind("<Return>", lambda event: self.add_except_word())
 
         self.words_frame = ctk.CTkFrame(self.except_words_window)
-        self.words_frame.pack(fill='both', expand=True, padx=5, pady=5)
+        self.words_frame.grid(row=1, column=0, sticky="nsw", padx=5, pady=5)
+
+        self.process_button = ctk.CTkButton(self.except_words_window, text="Wort zur Liste hinzufügen", command=self.add_except_word)
+        self.process_button.grid(row=0, column=3, columnspan=2, padx=5, pady=20)
+
+        self.save_button = ctk.CTkButton(self.except_words_window, text="Speichern & Datei neu verarbeiten", command=self.execute_except_words)
+        self.save_button.grid(row=4, column=0, columnspan=2, padx=5, pady=20)
+
+        self.except_quotation_marks_button = ctk.CTkButton(self.except_words_window, text="Anführungszeichen entfernen", command=self.except_quotation_marks)
+        self.except_quotation_marks_button.grid(row=4, column=2, columnspan=2, padx=5, pady=20)
 
         self.update_except_words_list()
 
@@ -43,8 +44,20 @@ class ExceptWordsWindow:
         for widget in self.words_frame.winfo_children():
             widget.destroy()
 
-        for word in self.main_app.except_words:
-            ctk.CTkLabel(self.words_frame, text=word).pack(anchor='w')
+        for i, word in enumerate(self.main_app.except_words):
+            frame = ctk.CTkFrame(self.words_frame)
+            frame.grid(row=i, column=0, sticky='ew')
+
+            label = ctk.CTkLabel(frame, text=word)
+            label.grid(row=0, column=0, sticky='w', padx=(0, 10)) 
+
+            button = ctk.CTkButton(frame, text="Löschen", command=lambda word=word: self.remove_except_word(word))
+            button.grid(row=0, column=3, sticky='e', padx=(10, 0))  
+            button.configure(width=8, height=0.8)  # Make the button smaller
+
+    def remove_except_word(self, word):
+        self.main_app.except_words.remove(word)
+        self.update_except_words_list()
 
     def execute_except_words(self):
         text = self.main_app.pdf_content_textbox.get("1.0", "end-1c")

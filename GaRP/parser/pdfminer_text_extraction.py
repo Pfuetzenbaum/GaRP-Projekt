@@ -97,7 +97,8 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                             elif character.get_text() == "\n":
                                 if extracted_text.endswith("-"):
                                     extracted_text = extracted_text[:-1]
-                                extracted_text += " "
+                                else:
+                                    extracted_text += " "
 
     # Entfernen der ersten beiden Zeichen des extrahierten Textes, da diese gesetzt werden aufgrund der Änderung der Schriftgröße
     extracted_text = extracted_text[2:]
@@ -260,9 +261,9 @@ def save_text_to_file(text, output_file):
 def main():
     output_file = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\output_test.txt"  
 
-    filename = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\test_files\\PA2_Version_7_0.pdf"
-    starting_page = 6
-    ending_page = 10
+    filename = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\test_files\\sample04.pdf"
+    starting_page = 1
+    ending_page = 1
     
     first_lines_to_skip = 0
 

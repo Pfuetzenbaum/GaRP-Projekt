@@ -3,7 +3,7 @@ package com.example;
 import java.io.IOException;
 
 import org.languagetool.language.GermanyGerman;
-import org.languagetool.language.AmericanEnglish;
+import org.languagetool.language.BritishEnglish;
 
 import py4j.GatewayServer;
 
@@ -14,7 +14,7 @@ public class DictionaryManagerEntryPoint {
 
     public DictionaryManagerEntryPoint() throws IOException {
         dictionaryManagerGerman = new DictionaryManager("GaRP-Projekt\\GaRP\\LanguageTool\\LanguageTool_Java\\src\\Dictionary\\CustomDictionaryGerman", new GermanyGerman());
-        dictionaryManagerEnglish = new DictionaryManager("GaRP-Projekt\\GaRP\\LanguageTool\\LanguageTool_Java\\src\\Dictionary\\CustomDictionaryEnglish", new AmericanEnglish());
+        dictionaryManagerEnglish = new DictionaryManager("GaRP-Projekt\\GaRP\\LanguageTool\\LanguageTool_Java\\src\\Dictionary\\CustomDictionaryEnglish", new BritishEnglish());
     }
 
     public DictionaryManager getDictionaryManagerGerman() {

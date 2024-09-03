@@ -229,7 +229,7 @@ def clean_text(cleaned_text):
     """
     # Behandlung von doppelten Leerzeichen
     cleaned_text = cleaned_text.replace("  ", " ")
-    cleaned_text = cleaned_text.replace("- ", " ")
+    cleaned_text = cleaned_text.replace("- ", "")
 
     # Behandlung von Fehlern bei Umlauten
     cleaned_text = cleaned_text.replace("¨u", "ü")
@@ -265,9 +265,9 @@ def main():
     """
     output_file = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\output_test.txt"  
 
-    filename = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\test_files\\PA2_Version_7_0.pdf"
-    starting_page = 6
-    ending_page = 10
+    filename = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\test_files\\sample04.pdf"
+    starting_page = 1
+    ending_page = 1
     
     first_lines_to_skip = 0
 
@@ -275,7 +275,7 @@ def main():
 
     extract_structured = True
 
-    check_fontname = True
+    check_fontname = False
 
     if extract_structured:
         extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip, last_lines_to_skip)

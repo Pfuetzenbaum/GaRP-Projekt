@@ -18,12 +18,12 @@ public class DictionaryFileHandler {
     }
 
     public void writeDictionary(List<String> words) throws IOException {
-        Files.write(dictionaryPath, words,StandardOpenOption.APPEND);
+        Files.write(dictionaryPath, words);
     }
 
     public void deleteWord(String word) throws IOException {
         List<String> words = readDictionary();
         words.remove(word);
-        Files.write(dictionaryPath, words);
+        writeDictionary(words);
     }
 }

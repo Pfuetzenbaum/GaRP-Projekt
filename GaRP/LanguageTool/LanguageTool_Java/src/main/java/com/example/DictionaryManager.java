@@ -78,7 +78,7 @@ public class DictionaryManager {
         List<String> words = dictionaryHandler.readDictionary();
         for (Rule rule : languageTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
-                ((SpellingCheckRule)rule).acceptPhrases(words);
+                ((SpellingCheckRule)rule).addIgnoreTokens(words);
             }
         }
     }
@@ -125,7 +125,7 @@ public class DictionaryManager {
         for (Rule rule : languageTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
             List<String> wordsToIgnore = Arrays.asList(word);
-            ((SpellingCheckRule)rule).acceptPhrases(wordsToIgnore);
+            ((SpellingCheckRule)rule).addIgnoreTokens(wordsToIgnore);
             }
         }
     }
@@ -136,7 +136,7 @@ public class DictionaryManager {
         for (Rule rule : languageTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {
             List<String> wordsToIgnore = Arrays.asList(word);
-            ((SpellingCheckRule)rule).acceptPhrases(wordsToIgnore);
+            ((SpellingCheckRule)rule).addIgnoreTokens(wordsToIgnore);
             }
         }
     }

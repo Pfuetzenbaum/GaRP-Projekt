@@ -18,17 +18,21 @@ gateway = JavaGateway(gateway_parameters=GatewayParameters(port=25333))
 
 class MainApplication:
     def __init__(self, root):
-        self.root = root
-        self.file_path = None
-        self.create_widgets()
-        self.result_labels = []
-        self.settings = Settings()
-        self.except_words = []
-        self.extracted_text = ""
-        self.dictionary_manager_german = gateway.entry_point.getDictionaryManagerGerman()
-        self.dictionary_manager_english = gateway.entry_point.getDictionaryManagerEnglish()
+        try:
+            self.root = root
+            self.file_path = None
+            self.create_widgets()
+            self.result_labels = []
+            self.settings = Settings()
+            self.except_words = []
+            self.extracted_text = ""
+            self.dictionary_manager_german = gateway.entry_point.getDictionaryManagerGerman()
+            self.dictionary_manager_english = gateway.entry_point.getDictionaryManagerEnglish()
 
-        self.dictionary_manager = self.get_dictionary_manager(self.settings.language)
+            self.dictionary_manager = self.get_dictionary_manager(self.settings.language)
+
+        except Exception as e:
+            self.show_error_message("Fehler beim Initialisieren des Programms", str(e))
 
     def get_dictionary_manager(self, language):
         if language == "Deutsch":
@@ -37,10 +41,6 @@ class MainApplication:
             return self.dictionary_manager_english
         else:
             raise ValueError("Ungültige Sprache")
-
-
-
-
 
     def create_widgets(self):
         try:
@@ -69,9 +69,13 @@ class MainApplication:
 
             self.left_frame = ctk.CTkFrame(self.root)
             self.left_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
-
+            
             self.right_frame = ctk.CTkFrame(self.root)
             self.right_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+            
+            self.root.rowconfigure(0, weight=1)  # Make the row grow with the window
+            self.root.columnconfigure(0, weight=2)  # Make the left column grow twice as much as the right column
+            self.root.columnconfigure(1, weight=1)  # Make the right column grow with the window
 
             self.upload_frame = ctk.CTkFrame(self.left_frame)
             self.upload_frame.pack(fill="x", pady=10, padx=20)
@@ -102,10 +106,6 @@ class MainApplication:
 
             except_word_button = ctk.CTkButton(content_frame, text="Wörter entfernen", font=('Arial', 14), command=self.open_except_words)
             except_word_button.pack(side="right", pady=5)
-
-            #self.error_listbox = Listbox(self.right_frame)
-            #self.error_listbox.pack(fill="both", expand=True, padx=10, pady=10)
-            #self.error_listbox.bind('<<ListboxSelect>>', self.show_spellcheck_details)
 
             self.error_tree = ttk.Treeview(self.right_frame)
             self.error_tree['columns'] = ('Fehler', 'Beschreibung')
@@ -143,7 +143,7 @@ class MainApplication:
 
             self.file_path = filedialog.askopenfilename(filetypes=[("PDF-Dateien", "*.pdf"), ("Alle Dateien", "*.*")])
             if self.file_path:
-                self.file_label.configure(text=f"Datei: {self.file_path}")
+                self.file_label.configure(text=f"Datei: {os.path.basename(self.file_path)}")
         except Exception as e:
             self.show_error_message("Fehler beim Hochladen der Datei", str(e))
 
@@ -190,8 +190,6 @@ class MainApplication:
 
     def check_spelling(self):
 
-        #self.error_listbox.delete(0, 'end')
-
         # Leere die error_tree
         self.error_tree.selection_clear()
         for item in self.error_tree.get_children():
@@ -224,13 +222,6 @@ class MainApplication:
                 # Binde die Auswahl-Events der error_tree neu, um sicherzustellen, dass sie korrekt funktionieren
                 self.error_tree.bind('<<TreeviewSelect>>', self.show_spellcheck_details)
                            
-                # Füge den Fehler zur Listbox hinzu (nur Kurzmeldung zur Übersicht)
-                #self.error_listbox.insert('end', f"{affected_part} - {long_message}")
-                #self.error_list.append(word)
-
-                # Binde die Auswahl-Events der Listbox neu, um sicherzustellen, dass sie korrekt funktionieren
-                #self.error_listbox.bind('<<ListboxSelect>>', self.show_spellcheck_details)
-
                 # Markiere den Fehler im Textfeld
                 self.highlight_error(from_pos, to_pos, short_message)
                 
@@ -298,12 +289,12 @@ class MainApplication:
                 error_details.configure(state="disabled")
                 error_details.pack(fill="both", expand=True, padx=10, pady=10)
 
-                add_word_button = ctk.CTkButton(spelling_error_window, text="Dauerhaft hinzufügen", font=('Arial', 14),
+                add_word_button = ctk.CTkButton(spelling_error_window, text="Dauerhaft zum Wörterbuch hinzufügen", font=('Arial', 14),
                                                 command=lambda: self.add_word_and_disable_button(add_word_button, affected_part))
                 add_word_button.pack(padx=10, pady=10)
 
                 add_word_temporary_button = ctk.CTkButton(spelling_error_window, text="Für dieses Session ignorieren", font=('Arial', 14),
-                                                        command=lambda: self.dictionary_manager.ignoreWordInSession(affected_part))
+                                                        command=lambda: self.ignore_word_and_disable_button(add_word_temporary_button,affected_part))
                 add_word_temporary_button.pack(padx=10, pady=10)
 
         except Exception as e:
@@ -311,6 +302,10 @@ class MainApplication:
 
     def add_word_and_disable_button(self, button, word):
         self.dictionary_manager.addWord(word)
+        button.configure(state="disabled")
+
+    def ignore_word_and_disable_button(self, button, word):
+        self.dictionary_manager.ignoreWordInSession(word)
         button.configure(state="disabled")
 
     def show_error_message(self, title, message):

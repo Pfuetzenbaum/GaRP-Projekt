@@ -3,7 +3,11 @@ import tkinter as tk
 from tkinter import filedialog, Menu, Text, Listbox, ttk
 import sys
 import os
+import subprocess
 
+java_path = r"C:\\Program Files\\Java\\jdk-17.0.2\bin\\java.exe"
+jar_path = r"C:\dev\\GaRP\\GaRP-Projekt\\GaRP\\LanguageTool\\LanguageTool_Java\\target\\demo-1.0.jar"
+subprocess.Popen([java_path, '-jar', jar_path], stdout=subprocess.PIPE)
 
 from py4j.java_gateway import JavaGateway, GatewayParameters
 from settings import Settings
@@ -14,7 +18,6 @@ from languagetool_settings_window import LanguageToolSettingsWindow
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
 from GaRP.parser.pdfminer_text_extraction import extract_text_from_pdf_structured, extract_text_from_pdf_pagewise
 
-gateway = JavaGateway(gateway_parameters=GatewayParameters(port=25333))
 
 class MainApplication:
     def __init__(self, root):
@@ -26,9 +29,10 @@ class MainApplication:
             self.settings = Settings()
             self.except_words = []
             self.extracted_text = ""
+
+            gateway = JavaGateway(gateway_parameters=GatewayParameters(port=25333))
             self.dictionary_manager_german = gateway.entry_point.getDictionaryManagerGerman()
             self.dictionary_manager_english = gateway.entry_point.getDictionaryManagerEnglish()
-
             self.dictionary_manager = self.get_dictionary_manager(self.settings.language)
 
         except Exception as e:
@@ -44,7 +48,7 @@ class MainApplication:
 
     def create_widgets(self):
         try:
-            self.root.title("PDF Rechtschreib- & Grammatikprüfung")
+            self.root.title("GaRP - das Tool zur Grammatik- und Rechtschreibprüfung von PDF-Dateien")
             #self.root.wm_attributes("-top", True)
 
             ctk.set_appearance_mode("system")
@@ -73,14 +77,10 @@ class MainApplication:
             self.right_frame = ctk.CTkFrame(self.root)
             self.right_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
             
-            self.root.rowconfigure(0, weight=1)  # Make the row grow with the window
-            self.root.columnconfigure(0, weight=2)  # Make the left column grow twice as much as the right column
-            self.root.columnconfigure(1, weight=1)  # Make the right column grow with the window
-
             self.upload_frame = ctk.CTkFrame(self.left_frame)
             self.upload_frame.pack(fill="x", pady=10, padx=20)
 
-            upload_label = ctk.CTkLabel(self.upload_frame, text="Datei zur Rechtschreibprüfung hinzufügen", font=('Arial', 14))
+            upload_label = ctk.CTkLabel(self.upload_frame, text="PDF-Datei zur Überprüfung auswählen", font=('Arial', 14))
             upload_label.pack(side='left', padx=5)
 
             upload_button = ctk.CTkButton(self.upload_frame, text="Datei auswählen...", font=('Arial', 14), command=self.upload_file)
@@ -105,7 +105,7 @@ class MainApplication:
             check_button.pack(pady=5)
 
             except_word_button = ctk.CTkButton(content_frame, text="Wörter entfernen", font=('Arial', 14), command=self.open_except_words)
-            except_word_button.pack(side="right", pady=5)
+            except_word_button.pack(side="right",padx=5, pady=5)
 
             self.error_tree = ttk.Treeview(self.right_frame)
             self.error_tree['columns'] = ('Fehler', 'Beschreibung')

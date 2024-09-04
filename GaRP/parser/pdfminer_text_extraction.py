@@ -1,6 +1,6 @@
 # Importieren der notwendigen Bibliotheken
 from pdfminer.high_level import extract_pages
-from pdfminer.layout import LTTextBoxHorizontal, LTChar, LTTextLine, LTAnno
+from pdfminer.layout import LTTextBoxHorizontal, LTChar, LTTextLine
 import re
 
 # Funktion zum Extrahieren von Text aus einer PDF-Datei strukturiert
@@ -87,17 +87,20 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                                 # Hinzufügen des aktuellen Zeichens zum extrahierten Text
                                 extracted_text += current_char
 
-                            # Überprüfen, ob das Zeichen ein LTAnno-Objekt ist (z.B. ein Leerzeichen oder ein Zeilenumbruch)
-                            # elif isinstance(character, LTAnno):
-
-                                # Hinzufügen eines Leerzeichens zum extrahierten Text)
-                                #extracted_text += " "
+                            # Leerzeichen und Zeilenumbrüche entsprechen nicht der LTChar-Klasse, sondern der LTAnno-Klasse
+                            # Überprüfen, ob das Zeichen ein Leerzeichen ist
                             elif character.get_text() == " ":
                                 extracted_text += " "
+                            
+                            # Überprüfen, ob das Zeichen ein Zeilenumbruch ist
                             elif character.get_text() == "\n":
+                                # Wenn vor dem Zeilenumbruch bereits ein Bindestricht steht, wird dieser entfernt
+                                # Dabei handelt es sich um eine Silbentrennung, welche den Fließtext stört
                                 if extracted_text.endswith("-"):
+                                    # Entfernen des Bindestrichs, indem das aktuell letzte Zeichen entfernt wird
                                     extracted_text = extracted_text[:-1]
                                 else:
+                                    # Wenn es sich nicht um eine Silbentrennung handelt, wird ein Leerzeichen hinzugefügt
                                     extracted_text += " "
 
     # Entfernen der ersten beiden Zeichen des extrahierten Textes, da diese gesetzt werden aufgrund der Änderung der Schriftgröße
@@ -241,10 +244,7 @@ def clean_text(cleaned_text):
     # Ersetzen von Mehrfachleerzeichen durch ein einzelnes Leerzeichen, aber keine Zeilenumbrüche
     cleaned_text = re.sub(r'[^\S\n]+', ' ', cleaned_text)
 
-    # Entfernen von Bindestrichen gefolgt von einem Leerzeichen
-    # cleaned_text = re.sub(r'-\s*', '', cleaned_text)
-
-    # Behandlung von Fehlern bei Umlauten
+    # Behandlung von Fehlern bei Umlauten, wenn ¨ und uaoUOA darauffolgt
     cleaned_text = re.sub(r'¨([uaoUOA])', lambda m: {'u': 'ü', 'a': 'ä', 'o': 'ö', 'U': 'Ü', 'A': 'Ä', 'O': 'Ö'}[m.group(1)], cleaned_text)
 
     # Behandlung von Ligaturen

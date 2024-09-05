@@ -53,9 +53,6 @@ class MainWindow:
             settings_menu.add_command(label="PDF-Parsing Einstellungen", command=self.open_parser_settings_window)
             settings_menu.add_command(label="Language Tool Einstellungen", command=self.open_lt_settings_window)
 
-            help_menu = Menu(menu, tearoff=0)
-            menu.add_cascade(label="Hilfe", menu=help_menu)
-
             self.left_frame = ctk.CTkFrame(self.root)
             self.left_frame.place(relwidth=0.7, relheight=1, relx=0, rely=0)
             

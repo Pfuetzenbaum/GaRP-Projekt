@@ -80,8 +80,8 @@ class SpellcheckController:
     def show_spellcheck_details(self, event):
         try:
             selected_items = self.main_window.error_tree.selection()
-            if len(selected_items) > 0:
-                selected_item = self.main_window.error_tree.selection()[0]
+            if selected_items:
+                selected_item = selected_items[0]
                 affected_part = self.main_window.error_tree.item(selected_item, 'values')[0]
 
                 # Finde den entsprechenden Fehler in der error_list

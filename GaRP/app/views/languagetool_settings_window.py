@@ -28,5 +28,5 @@ class LanguageToolSettingsWindow:
         selected_language = self.language_var.get()
         # Save the selected language to your settings or database
         self.main_window.settings.language = selected_language
-        self.main_window.dictionary_manager_gateway.dictionary_manager = self.main_window.dictionary_manager_gateway.get_dictionary_manager(selected_language)
+        self.main_window.dictionary_manager_gateway.set_dictionary_manager(selected_language)
         self.settings_window.destroy()  # Close the settings window

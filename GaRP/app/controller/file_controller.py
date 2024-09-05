@@ -26,7 +26,7 @@ class FileController:
 
             self.file_path = filedialog.askopenfilename(filetypes=[("PDF-Dateien", "*.pdf"), ("Alle Dateien", "*.*")])
             if self.file_path:
-                self.main_window.file_label.configure(text=f"Datei: {os.path.basename(self.file_path)}")
+                self.main_window.file_label.configure(text=f"{os.path.basename(self.file_path)}")
         except Exception as e:
             self.main_window.error_window.show_error_message("Fehler beim Hochladen der Datei", str(e))
 

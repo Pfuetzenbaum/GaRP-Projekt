@@ -10,11 +10,11 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
     Übergabeparameter:
         pdf_path (str): Pfad zur PDF-Datei
-        starting_page (int, optional): Erste Seite, die extrahiert werden soll
-        ending_page (int, optional): Letzte Seite, die extrahiert werden soll
-        check_fontname (bool, optional): Ob der Fontname überprüft werden soll
-        first_lines_to_skip (int, optional): Anzahl der ersten Zeilen, die übersprungen werden sollen
-        last_lines_to_skip (int, optional): Anzahl der letzten Zeilen, die übersprungen werden sollen
+        starting_page (int): Erste Seite, die extrahiert werden soll
+        ending_page (int): Letzte Seite, die extrahiert werden soll
+        check_fontname (bool): Ob der Fontname überprüft werden soll
+        first_lines_to_skip (int): Anzahl der ersten Zeilen, die übersprungen werden sollen
+        last_lines_to_skip (int): Anzahl der letzten Zeilen, die übersprungen werden sollen
 
     Rückgabe:
         str: Extrahierter und bereinigter Text
@@ -26,7 +26,14 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
     current_page = 0
 
-    # Durchlaufen aller Seiten in der PDF-Datei
+    # Behandlung von Ligaturen und Aufzählungszeichen, Liste erweiterbar
+    special_chars = {
+        "ﬀ": "ff",
+        "ﬃ": "ffi",
+        "•": "\n•",
+    }
+
+    # Durchlaufen aller Seiten der PDF-Datei
     for page in extract_pages(pdf_path):
         current_page += 1  
         # Überspringen von Seiten, die nicht extrahiert werden sollen
@@ -58,23 +65,14 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                 for text_line in page_element:
                     # Überprüfen, ob die Textzeile eine LTTextLine-Instanz ist
                     if isinstance(text_line, LTTextLine):
-                        # Durchlaufen aller Zeichen in der Textzeile
+                        # Durchlaufen aller Zeichen (LTChar) in der Textzeile
                         for character in text_line:
                             # Überprüfen, ob das Zeichen ein LTChar-Objekt ist
                             if isinstance(character, LTChar):
 
                                 # Ersetzen von Ligaturen bereits zu diesem Zeitpunkt
                                 # Ansonsten kann es zu Problemen bei der nachträglichen Verarbeitung der Schriftart kommen kann
-                                match character.get_text():
-                                    case "ﬀ":
-                                        extracted_text += "ff"
-                                        continue
-                                    case "ﬃ":
-                                        extracted_text += "ffi"
-                                        continue
-                                    case "•":
-                                        extracted_text += "\n•"
-                                        continue
+                                extracted_text += special_chars.get(character.get_text(), "")
                                 
                                 # Überprüfen, ob der Fontname berücksichtigt werden soll
                                 if check_fontname:
@@ -259,9 +257,9 @@ def save_text_to_file(text, output_file):
         file.write(text)
 
 def main():
-    output_file = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\output_test.txt"  
+    output_file = "GaRP-Projekt\\GaRP\\app\\integrations\\output_test.txt"  
 
-    filename = "C:\\Visual Studio Code\\GaRP\\GaRP-Projekt\\GaRP\\parser\\test_files\\sample04.pdf"
+    filename = "GaRP-Projekt\\GaRP\\app\\integrations\\test_files\\sample08.pdf"
     starting_page = 1
     ending_page = 1
     
@@ -271,7 +269,7 @@ def main():
 
     extract_structured = True
 
-    check_fontname = False
+    check_fontname = True
 
     if extract_structured:
         extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip, last_lines_to_skip)

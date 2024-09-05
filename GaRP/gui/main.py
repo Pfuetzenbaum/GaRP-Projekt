@@ -16,7 +16,7 @@ from parser_settings_window import ParserSettingsWindow
 from languagetool_settings_window import LanguageToolSettingsWindow
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')))
-from GaRP.parser.pdfminer_text_extraction import extract_text_from_pdf_structured, extract_text_from_pdf_pagewise
+from GaRP.app.integrations.pdfminer_text_extraction import extract_text_from_pdf_structured, extract_text_from_pdf_pagewise
 
 
 class MainApplication:

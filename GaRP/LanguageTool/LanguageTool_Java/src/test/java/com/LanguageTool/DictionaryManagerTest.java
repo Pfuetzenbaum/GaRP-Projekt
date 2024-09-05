@@ -1,11 +1,11 @@
-package com.example;
+package com.LanguageTool;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.languagetool.language.GermanyGerman;
 import org.languagetool.rules.RuleMatch;
 
-import com.example.DictionaryManager.FilteredRuleMatch;
+import com.LanguageTool.DictionaryManager.FilteredRuleMatch;
 
 import java.io.IOException;
 import java.util.List;

@@ -1,5 +1,4 @@
-com/example/DictionaryManager.class
-com/example/DictionaryManager$FilteredRuleMatch.class
-com/example/DictionaryManagerEntryPoint.class
-com/example/Demo.class
-com/example/DictionaryFileHandler.class
+com/LanguageTool/DictionaryManager$FilteredRuleMatch.class
+com/LanguageTool/DictionaryManager.class
+com/LanguageTool/DictionaryFileHandler.class
+com/LanguageTool/DictionaryManagerEntryPoint.class

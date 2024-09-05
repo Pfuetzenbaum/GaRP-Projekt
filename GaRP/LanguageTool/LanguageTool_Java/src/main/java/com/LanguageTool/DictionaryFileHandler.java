@@ -1,4 +1,4 @@
-package com.example;
+package com.LanguageTool;
 
 import java.nio.file.*;
 import java.io.IOException;

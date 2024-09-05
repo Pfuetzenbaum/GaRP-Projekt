@@ -1,6 +1,8 @@
-package com.example;
+package com.LanguageTool;
 
 import org.junit.jupiter.api.*;
+
+
 import java.io.IOException;
 import java.util.*;
 

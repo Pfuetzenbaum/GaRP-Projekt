@@ -49,7 +49,7 @@ class MainApplication:
     def create_widgets(self):
         try:
             self.root.title("GaRP - das Tool zur Grammatik- und Rechtschreibprüfung von PDF-Dateien")
-            #self.root.wm_attributes("-top", True)
+            self.root.geometry("1200x800")
 
             ctk.set_appearance_mode("system")
             ctk.set_default_color_theme("green")
@@ -72,10 +72,10 @@ class MainApplication:
             menu.add_cascade(label="Hilfe", menu=help_menu)
 
             self.left_frame = ctk.CTkFrame(self.root)
-            self.left_frame.pack(side="left", fill="both", expand=True, padx=10, pady=10)
+            self.left_frame.place(relwidth=0.7, relheight=1, relx=0, rely=0)
             
             self.right_frame = ctk.CTkFrame(self.root)
-            self.right_frame.pack(side="right", fill="both", expand=True, padx=10, pady=10)
+            self.right_frame.place(relwidth=0.3, relheight=1, relx=0.7, rely=0)
             
             self.upload_frame = ctk.CTkFrame(self.left_frame)
             self.upload_frame.pack(fill="x", pady=10, padx=20)
@@ -122,6 +122,8 @@ class MainApplication:
 
             export_button = ctk.CTkButton(self.right_frame, text="Fehler exportieren", font=('Arial', 14), command=self.export_errors)
             export_button.pack(pady=10)
+
+            self.root.state("zoomed")
 
         except Exception as e:
             self.show_error_message("Fehler beim Erstellen der Oberfläche", str(e))

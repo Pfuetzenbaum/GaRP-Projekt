@@ -114,6 +114,10 @@ class SpellcheckController:
                                                         command=lambda: self.ignore_word_and_disable_button(add_word_temporary_button,affected_part))
                 add_word_temporary_button.pack(padx=10, pady=10)
 
+                if selected_error.getShortMessage() != 'Rechtschreibfehler' and selected_error.getShortMessage() != 'Spelling mistake':
+                    add_word_button.configure(state="disabled")
+                    add_word_temporary_button.configure(state="disabled")
+
         except Exception as e:
             self.main_window.error_window.show_error_message("Fehler bei der Anzeige von Fehlerdetails", str(e))
 

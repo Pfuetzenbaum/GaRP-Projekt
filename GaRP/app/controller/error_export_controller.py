@@ -6,7 +6,7 @@ class ErrorExportController:
 
     def export_errors(self):
         try:
-            file_path = filedialog.asksaveasfilename(defaultextension=".txt", filetypes=[("Textdateien", "*.txt")])
+            file_path = filedialog.asksaveasfilename(defaultextension=".csv", filetypes=[("Textdateien", "*.csv")])
             if file_path:
                 with open(file_path, "w", encoding="utf-8") as f:
                     for error in self.main_window.error_list:

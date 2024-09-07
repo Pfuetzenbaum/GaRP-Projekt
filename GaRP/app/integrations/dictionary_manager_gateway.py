@@ -1,4 +1,5 @@
 from py4j.java_gateway import JavaGateway, GatewayParameters
+import subprocess
 
 class DictionaryManagerGateway:
     # Sprachkonstanten
@@ -6,6 +7,11 @@ class DictionaryManagerGateway:
     ENGLISCH = "Englisch"
     
     def __init__(self, settings):
+        jar_path ="integrations/lib/demo-1.0.jar"
+
+        # Starte den Java Gateway-Server als Subprozess
+        self.process = subprocess.Popen(['java', '-jar', jar_path])
+
         self.settings = settings
         self.gateway = JavaGateway(gateway_parameters=GatewayParameters(port=25333))
         self.dictionary_manager_german = None

@@ -1,3 +1,18 @@
+"""Copyright (C) 2024 Gantert, Schneider, Sewald
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/> """
+
 # Importieren der notwendigen Bibliotheken
 from pdfminer.high_level import extract_pages
 from pdfminer.layout import LTTextBoxHorizontal, LTChar, LTTextLine
@@ -28,8 +43,12 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
     # Behandlung von Ligaturen und Aufzählungszeichen, Liste erweiterbar
     special_chars = {
-        "ﬀ": "ff",
         "ﬃ": "ffi",
+        "ﬁ": "fi",
+        "ﬄ": "ffl",        
+        "ﬂ": "fl",
+        "ﬅ": "ft",
+        "ﬀ": "ff",
         "•": "\n•",
     }
 
@@ -72,7 +91,10 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
 
                                 # Ersetzen von Ligaturen bereits zu diesem Zeitpunkt
                                 # Ansonsten kann es zu Problemen bei der nachträglichen Verarbeitung der Schriftart kommen kann
-                                extracted_text += special_chars.get(character.get_text(), "")
+                                # Sofern ein Zeichen in der Liste der Sonderzeichen enthalten ist, wird es behandelt und übersprungen
+                                if character.get_text() in special_chars:
+                                    extracted_text += special_chars.get(character.get_text(), "")
+                                    continue
                                 
                                 # Überprüfen, ob der Fontname berücksichtigt werden soll
                                 if check_fontname:
@@ -259,9 +281,9 @@ def save_text_to_file(text, output_file):
 def main():
     output_file = "GaRP-Projekt\\GaRP\\app\\integrations\\output_test.txt"  
 
-    filename = "GaRP-Projekt\\GaRP\\app\\integrations\\test_files\\sample08.pdf"
-    starting_page = 1
-    ending_page = 1
+    filename = "GaRP-Projekt\\GaRP\\app\\integrations\\test_files\\BA_BR.pdf"
+    starting_page = 7
+    ending_page = 8
     
     first_lines_to_skip = 0
 
@@ -269,7 +291,7 @@ def main():
 
     extract_structured = True
 
-    check_fontname = True
+    check_fontname = False
 
     if extract_structured:
         extracted_and_cleaned_text = extract_text_from_pdf_structured(filename, starting_page, ending_page, check_fontname, first_lines_to_skip, last_lines_to_skip)

@@ -19,7 +19,7 @@ import subprocess
 class DictionaryManagerGateway:
     def __init__(self, settings):
 
-        jar_path ="demo-1.0_new.jar"
+        jar_path ="demo-1.0.jar"
 
         # Starte den Java Gateway-Server als Subprozess
         self.process = subprocess.Popen(['java', '-jar', jar_path])

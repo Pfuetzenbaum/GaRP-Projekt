@@ -4,9 +4,14 @@ from cx_Freeze import setup, Executable
 # Build options für cx_Freeze
 build_exe_options = {
     "packages": ["os", "py4j", "customtkinter", "tkinter", "pdfminer"],
-    "include_files": ["integrations/lib/demo-1.0_new.jar", "integrations/lib/Dictionary/CustomDictionaryGerman"],  # JAR-Datei inkludieren
+    "include_files": ["integrations/lib/demo-1.0.jar", "integrations/lib/Dictionary/CustomDictionaryGerman"],  # JAR-Datei inkludieren
     "include_msvcr": True  # Um Microsoft Visual C++ Redistributables zu includieren, falls nötig
 }
+
+build_options = {
+    'build_exe': 'C:\\dev\\GaRP\\GaRP Anwendung'  # Doppelte Backslashes verwenden
+}
+
 
 # Festlegen der Basis für die ausführbare Datei
 base = None

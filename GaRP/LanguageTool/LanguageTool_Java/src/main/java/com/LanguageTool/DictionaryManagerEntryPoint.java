@@ -27,7 +27,7 @@ public class DictionaryManagerEntryPoint {
 
     public static void main(String[] args) throws IOException {
         String currentWorkingDirectory = System.getProperty("user.dir");
-        System.out.println("Current working directory: " + currentWorkingDirectory + "/" + "app/integrations/lib/Dictionary/CustomDictionaryGerman");
+        System.out.println("Current working directory: " + currentWorkingDirectory);
         GatewayServer gatewayServer = new GatewayServer(new DictionaryManagerEntryPoint());
         gatewayServer.start();
         System.out.println("Gateway Server Started");

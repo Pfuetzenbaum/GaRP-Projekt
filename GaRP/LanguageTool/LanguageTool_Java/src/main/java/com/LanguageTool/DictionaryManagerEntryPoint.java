@@ -13,8 +13,8 @@ public class DictionaryManagerEntryPoint {
     private DictionaryManager dictionaryManagerEnglish;
 
     public DictionaryManagerEntryPoint() throws IOException {
-        dictionaryManagerGerman = new DictionaryManager("GaRP/LanguageTool/LanguageTool_Java/src/Dictionary/CustomDictionaryGerman", new GermanyGerman());
-        dictionaryManagerEnglish = new DictionaryManager("GaRP/LanguageTool/LanguageTool_Java/src/Dictionary/CustomDictionaryEnglish", new BritishEnglish());
+        dictionaryManagerGerman = new DictionaryManager("app/integrations/lib/Dictionary/CustomDictionaryGerman", new GermanyGerman());
+        dictionaryManagerEnglish = new DictionaryManager("app/integrations/lib/Dictionary/CustomDictionaryEnglish", new BritishEnglish());
     }
 
     public DictionaryManager getDictionaryManagerGerman() {
@@ -26,6 +26,8 @@ public class DictionaryManagerEntryPoint {
     }
 
     public static void main(String[] args) throws IOException {
+        String currentWorkingDirectory = System.getProperty("user.dir");
+        System.out.println("Current working directory: " + currentWorkingDirectory + "/" + "app/integrations/lib/Dictionary/CustomDictionaryGerman");
         GatewayServer gatewayServer = new GatewayServer(new DictionaryManagerEntryPoint());
         gatewayServer.start();
         System.out.println("Gateway Server Started");

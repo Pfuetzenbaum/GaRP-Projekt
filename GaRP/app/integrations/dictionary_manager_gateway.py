@@ -33,6 +33,3 @@ class DictionaryManagerGateway:
         """Setzt den Wörterbuchmanager basierend auf der angegebenen Sprache."""
         self.dictionary_manager = self._get_dictionary_manager(language)
     
-    def close_gateway(self):
-        """Schließt den JavaGateway, um Ressourcen freizugeben."""
-        self.gateway.close()

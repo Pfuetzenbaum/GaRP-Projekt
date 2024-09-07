@@ -82,6 +82,8 @@ class MainWindow:
 
             self.pdf_content_textbox = Text(content_frame, height=10, wrap='word', borderwidth=1, relief='solid')
             self.pdf_content_textbox.pack(padx=5, pady=5, fill='both', expand=True)
+            self.pdf_content_textbox.tag_config("spelling_error", background="#FF0000") #Rot
+            self.pdf_content_textbox.tag_config("other_error", background="#FFA07A") #Orange
 
             check_button = ctk.CTkButton(content_frame, text="Überprüfen", font=('Arial', 14), command=self.spellcheck_controller.check_spelling)
             check_button.pack(pady=5)

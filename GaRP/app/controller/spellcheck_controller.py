@@ -63,10 +63,6 @@ class SpellcheckController:
         # Berechnen Sie die Spalte des Fehlers in der Zeile
         column = from_pos - line_length
 
-         # Markieren Sie den Fehler im Textfeld
-        self.main_window.pdf_content_textbox.tag_config("spelling_error", background="#FF0000") #Rot
-        self.main_window.pdf_content_textbox.tag_config("other_error", background="#FFA07A") #Orange
-
         if short_message == 'Rechtschreibfehler' or short_message == 'Spelling mistake':
 
             self.main_window.pdf_content_textbox.tag_remove("spelling_error", f"{line_number}.{column}", f"{line_number}.{column + (to_pos - from_pos)}")

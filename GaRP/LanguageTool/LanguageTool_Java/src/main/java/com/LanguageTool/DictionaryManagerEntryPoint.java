@@ -13,8 +13,8 @@ public class DictionaryManagerEntryPoint {
     private DictionaryManager dictionaryManagerEnglish;
 
     public DictionaryManagerEntryPoint() throws IOException {
-        dictionaryManagerGerman = new DictionaryManager("app/integrations/lib/Dictionary/CustomDictionaryGerman", new GermanyGerman());
-        dictionaryManagerEnglish = new DictionaryManager("app/integrations/lib/Dictionary/CustomDictionaryEnglish", new BritishEnglish());
+        dictionaryManagerGerman = new DictionaryManager("CustomDictionaryGerman", new GermanyGerman());
+        dictionaryManagerEnglish = new DictionaryManager("CustomDictionaryEnglish", new BritishEnglish());
     }
 
     public DictionaryManager getDictionaryManagerGerman() {

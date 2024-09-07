@@ -1,3 +1,16 @@
+"""# Copyright (C) 2024 Gantert, Schneider, Sewald
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>"""
 import customtkinter as ctk
 import tkinter as tk
 from tkinter import Menu, Text, ttk
@@ -46,7 +59,7 @@ class MainWindow:
             menu.add_cascade(label="Datei", menu=file_menu)
             file_menu.add_command(label="Öffnen", command=self.file_controller.upload_file)
             file_menu.add_separator()
-            file_menu.add_command(label="Schließen", command=self.root.quit)
+            file_menu.add_command(label="Schließen", command=self.on_closing)
 
             settings_menu = Menu(menu, tearoff=0)
             menu.add_cascade(label="Einstellungen", menu=settings_menu)
@@ -108,6 +121,11 @@ class MainWindow:
             export_button.pack(pady=10)
 
             self.root.state("zoomed")
+            
+            # Hier bindest du die Schließaktion ab
+            self.root.protocol("WM_DELETE_WINDOW", self.on_closing)
+    
+
 
         except Exception as e:
             self.error_window.show_error_message("Fehler beim Erstellen der Oberfläche", str(e))
@@ -120,3 +138,9 @@ class MainWindow:
 
     def open_except_words(self):
         ExceptWordsWindow(self.root, self)
+    
+    def on_closing(self):
+        """Wird aufgerufen, wenn das Fenster geschlossen wird."""
+        # Rufe hier die Methode zum Beenden des Java-Prozesses auf
+        self.dictionary_manager_gateway.stop_java_process()
+        self.root.destroy()

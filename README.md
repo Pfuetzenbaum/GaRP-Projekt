@@ -74,7 +74,7 @@ GaRP ist ein Tool zur Rechtschreib- und Grammatikprüfung für PDF-Dateien, entw
 
 ## Lizenz
 
-Dieses Projekt steht unter der [GPL-Lizenz](LICENSE).
+Dieses Projekt steht unter der [GPL-Lizenz](LICENSE.txt).
 
 ## Autoren
 

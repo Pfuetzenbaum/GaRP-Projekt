@@ -13,8 +13,8 @@ public class DictionaryManagerEntryPoint {
     private DictionaryManager dictionaryManagerEnglish;
 
     public DictionaryManagerEntryPoint() throws IOException {
-        dictionaryManagerGerman = new DictionaryManager("CustomDictionaryGerman", new GermanyGerman());
-        dictionaryManagerEnglish = new DictionaryManager("CustomDictionaryEnglish", new BritishEnglish());
+        dictionaryManagerGerman = new DictionaryManager("GaRP-Projekt/GaRP/LanguageTool/LanguageTool_Java/src/Dictionary/CustomDictionaryGerman", new GermanyGerman());
+        dictionaryManagerEnglish = new DictionaryManager("GaRP-Projekt/GaRP/LanguageTool/LanguageTool_Java/src/Dictionary/CustomDictionaryEnglish", new BritishEnglish());
     }
 
     public DictionaryManager getDictionaryManagerGerman() {

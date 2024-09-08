@@ -185,5 +185,5 @@ class MainWindow:
         Methode, die aufgerufen wird, wenn das Fenster geschlossen wird.
         Beendet den Java-Prozess und zerstört das Hauptfenster.
         """
-        self.dictionary_manager_gateway.stop_java_process()
+        #self.dictionary_manager_gateway.stop_java_process() (Wird nur für die Paketierung benötigt)
         self.root.destroy()

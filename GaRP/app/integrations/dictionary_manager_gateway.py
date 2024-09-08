@@ -27,11 +27,11 @@ class DictionaryManagerGateway:
 
         :param settings: Die Anwendungseinstellungen, die die zu verwendende Sprache und andere Parameter enthalten.
         """
-        jar_path = "demo-1.0.jar"  # Pfad zur JAR-Datei, die den Java-Wörterbuchmanager enthält
+        #jar_path = "demo-1.0.jar"  # Pfad zur JAR-Datei, die den Java-Wörterbuchmanager enthält
 
         # Starte den Java Gateway-Server als Subprozess
-        self.process = subprocess.Popen(['java', '-jar', jar_path])  # Starte den Java-Prozess im Hintergrund
-        time.sleep(5)  # Warte 3 Sekunden, um sicherzustellen, dass der Prozess vollständig gestartet ist
+        #self.process = subprocess.Popen(['java', '-jar', jar_path])  # Starte den Java-Prozess im Hintergrund (wird nur benötigt, wenn die Anwendung paketiert wird)
+        #time.sleep(5)  # Warte 3 Sekunden, um sicherzustellen, dass der Prozess vollständig gestartet ist
 
         self.settings = settings  # Speichere die Anwendungseinstellungen
         # Erstelle eine Verbindung zum Java Gateway

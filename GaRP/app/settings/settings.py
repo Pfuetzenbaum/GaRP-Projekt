@@ -14,11 +14,30 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <https://www.gnu.org/licenses/> """
 
 class Settings:
+    """
+    Diese Klasse speichert die Konfigurationseinstellungen für die Anwendung.
+    Die Einstellungen werden von verschiedenen Fenstern und Controllern verwendet, um die
+    Funktionsweise der Anwendung zu steuern, wie z.B. das Parsing von PDF-Dateien und die Spracheinstellungen.
+    """
+
     def __init__(self):
+        """
+        Konstruktor der Settings-Klasse. Initialisiert alle Standardeinstellungen.
+        """
+        # Grundeinstellung für das Parsing, entweder "structured" (strukturiert) oder "pagewise" (seitenweise)
         self.parsing_basic_setting = "structured"
-        self.starting_page = 1
-        self.ending_page = 100
+        
+        # Startseite und Endseite für das Parsing von PDF-Dateien
+        self.starting_page = 1  # Die erste Seite, die im PDF geparst wird
+        self.ending_page = 100  # Die letzte Seite, die im PDF geparst wird
+        
+        # Boolean, um zu überprüfen, ob die Schriftart beim Parsing berücksichtigt werden soll
         self.check_fontname = False
+        
+        # Anzahl der ersten und letzten Zeilen, die beim Parsing übersprungen werden sollen
         self.first_lines_to_skip = 0
         self.last_lines_to_skip = 0
+        
+        # Spracheinstellung für die Rechtschreib- und Grammatikprüfung (Standard ist "Deutsch")
         self.language = "Deutsch"
+

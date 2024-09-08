@@ -1,4 +1,3 @@
-parser/test_files/BA_BR.pdf
-parser/output_test.txt
 GaRP/LanguageTool/LanguageTool_Java/target/classes/com/.DS_Store
 GaRP/LanguageTool/LanguageTool_Java/target/classes/.DS_Store
+GaRP/app/integrations/output_test.txt

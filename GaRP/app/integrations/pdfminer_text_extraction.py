@@ -75,7 +75,7 @@ def extract_text_from_pdf_structured(pdf_path, starting_page=1, ending_page=100,
                     continue 
 
                 # Überspringen von Zeilen am Seitenende
-                if current_line >= total_lines - last_lines_to_skip:
+                elif current_line >= total_lines - last_lines_to_skip:
                     break
 
                 current_line += 1

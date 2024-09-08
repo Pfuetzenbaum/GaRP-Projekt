@@ -28,8 +28,9 @@ public class DictionaryFileHandlerTest {
     private static final String TEST_DICTIONARY_PATH = "src/Dictionary/CustomDictionaryTest";
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         handler = new DictionaryFileHandler(TEST_DICTIONARY_PATH);
+        handler.clearDictionary();
     }
 
     // Testet ob Wörter in das Dictionary geschrieben werden können

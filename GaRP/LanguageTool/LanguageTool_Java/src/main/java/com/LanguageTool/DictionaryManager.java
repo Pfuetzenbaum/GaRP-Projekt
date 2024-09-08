@@ -129,8 +129,7 @@ public class DictionaryManager {
 
     // Methode zum Hinzufügen eines Wortes zum Dictionary zum dauerhaften Ignorieren
     public void addWord(String word) throws IOException {
-        List<String> words = dictionaryHandler.readDictionary();
-        words.add(word);
+        List<String> words = Arrays.asList(word);
         dictionaryHandler.writeDictionary(words);
         for (Rule rule : languageTool.getAllActiveRules()) {
             if (rule instanceof SpellingCheckRule) {

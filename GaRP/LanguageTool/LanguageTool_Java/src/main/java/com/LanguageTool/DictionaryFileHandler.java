@@ -31,12 +31,16 @@ public class DictionaryFileHandler {
     }
 
     public void writeDictionary(List<String> words) throws IOException {
-        Files.write(dictionaryPath, words);
+        Files.write(dictionaryPath, words, StandardOpenOption.APPEND);
     }
 
     public void deleteWord(String word) throws IOException {
         List<String> words = readDictionary();
         words.remove(word);
-        writeDictionary(words);
+        Files.write(dictionaryPath, words);
+    }
+
+   public void clearDictionary() throws IOException {
+        Files.write(dictionaryPath, Collections.emptyList(), StandardOpenOption.TRUNCATE_EXISTING);
     }
 }

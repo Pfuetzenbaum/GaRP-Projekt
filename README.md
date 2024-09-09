@@ -78,6 +78,6 @@ Dieses Projekt steht unter der [GPL-Lizenz](LICENSE.txt).
 
 ## Autoren
 
-- Luis Gantert
-- Robin Schneider
-- Johannes Sewald
+- Luisgtr3
+- Schneiderro
+- Pfuetzenbaum

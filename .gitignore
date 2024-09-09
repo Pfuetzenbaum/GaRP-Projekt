@@ -2,3 +2,6 @@ GaRP/LanguageTool/LanguageTool_Java/target/classes/com/.DS_Store
 GaRP/LanguageTool/LanguageTool_Java/target/classes/.DS_Store
 GaRP/app/integrations/output_test.txt
 GaRP/.vscode
+GaRP/app/controller/__pycache__/
+GaRP/app/settings/__pycache__/
+GaRP/app/views/__pycache__/

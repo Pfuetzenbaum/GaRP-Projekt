@@ -129,8 +129,6 @@ class ParserSettingsWindow:
             if self.main_app.settings.parsing_basic_setting == "structured":
                 self.main_app.settings.check_fontname = self.check_fontname_var.get()
 
-            print(self.main_app.settings.parsing_basic_setting)
-
             # Schließe das Einstellungsfenster
             self.settings_window.destroy()
         except ValueError as e:

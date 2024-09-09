@@ -29,8 +29,8 @@ GaRP ist ein Tool zur Rechtschreib- und Grammatikprüfung für PDF-Dateien, entw
    - Stelle sicher, dass [Java Runtime Environment](https://www.java.com/download/) auf deinem System installiert ist.
 
 2. **EXE-Datei verwenden**:
-   - Lade die EXE-Datei herunter und stelle sicher, dass die JRE installiert ist.
-   - Doppelklicke auf die EXE, um GaRP zu starten.
+   - Lade das Verzeichnis (inkl. .exe-Datei) \app\build\GaRP-Anwendung herunter und stelle sicher, dass die JRE installiert ist.
+   - Doppelklicke auf die main.exe, um die GaRP-Anwendung zu starten.
 
 ## Verwendung
 
